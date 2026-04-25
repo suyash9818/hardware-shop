@@ -49,6 +49,7 @@ In Render dashboard, go to "Environment" tab and add:
 DJANGO_DEBUG=False
 DJANGO_SECRET_KEY=your-secure-random-key-here
 DJANGO_ALLOWED_HOSTS=your-app-name.onrender.com
+DJANGO_MIGRATE_ON_STARTUP=1
 ```
 
 ## Step 5: Database (Free PostgreSQL)
@@ -64,13 +65,12 @@ DATABASE_URL=postgres://... (copy from PostgreSQL)
 
 ## Step 6: Run Migrations
 
-1. In Render, go to your web service
-2. Click "Shell" to open terminal
-3. Run:
+Migrations run automatically on app startup when `DJANGO_MIGRATE_ON_STARTUP=1`.
+You can also run them manually from the Render shell:
 
 ```bash
 python manage.py migrate
-python manage.py collectstatic
+python manage.py collectstatic --noinput
 ```
 
 ## Step 7: Create Superuser
