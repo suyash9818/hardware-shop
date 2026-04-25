@@ -12,7 +12,7 @@ This final project demonstrates:
 - Basic warranty / RMA workflow
 - REST API with JWT and DRF token authentication routes
 - Demo-ready payment, shipping, and tax estimate integrations
-- Automated Django coverage with 13 passing tests
+- Automated Django coverage with 14 passing tests
 
 ## Quickstart
 
@@ -34,6 +34,7 @@ python manage.py runserver
 - Products: http://127.0.0.1:8000/catalog/products/
 - Cart: http://127.0.0.1:8000/cart/
 - Orders: http://127.0.0.1:8000/orders/
+- Checkout/payment: open an order, then use its Checkout button
 - RMA: http://127.0.0.1:8000/rma/
 - Inventory dashboard: http://127.0.0.1:8000/inventory/dashboard/
 - Pricing dashboard: http://127.0.0.1:8000/pricing/dashboard/
@@ -52,7 +53,7 @@ python manage.py test
 ## Submission Notes
 
 - Demo data is provided in `fixtures/demo_data.json` so the project does not depend on a bundled SQLite database snapshot.
-- Payment, shipping, and tax are implemented as demo-ready stubs. They support quote and estimate workflows and can be replaced with real credentials later.
+- Payment, shipping, and tax are implemented as demo-ready stubs. Checkout records paid/unpaid status without storing card details and can be replaced with real credentials later.
 - The API includes JWT and DRF token issuance plus a protected `/api/auth/me/` endpoint. Main resource endpoints remain open in development for easier review.
 - If you run the project from a cloud-synced folder such as OneDrive and SQLite reports locking or disk I/O issues, copy the project to a normal local folder before running migrations.
 - The report source lives in `CPSC_597__Project_Seminar_Project_Report/main.tex`.

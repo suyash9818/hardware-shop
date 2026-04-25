@@ -56,4 +56,4 @@ def checkout(request):
         )
     
     items.delete()
-    return redirect("orders:order_detail", order_id=order.id)
+    return redirect("orders:order_quote", order_id=order.id)

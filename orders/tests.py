@@ -124,7 +124,31 @@ class OrderModelAndViewTests(TestCase):
         OrderItem.objects.create(order=order, product=self.product, quantity=1, unit_price_usd=self.product.price_usd)
         response = self.client.get(reverse("orders:order_quote", args=[order.id]))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Checkout Quote")
+        self.assertContains(response, "Order Quote")
+
+    def test_order_payment_marks_order_paid_with_demo_gateway(self):
+        order = Order.objects.create(status=Order.Status.DRAFT)
+        OrderItem.objects.create(order=order, product=self.product, quantity=1, unit_price_usd=self.product.price_usd)
+
+        response = self.client.post(
+            reverse("orders:order_payment", args=[order.id]),
+            {
+                "name": "Demo Buyer",
+                "card_number": "4242 4242 4242 4242",
+                "exp_month": "12",
+                "exp_year": "2030",
+                "cvc": "123",
+                "zip": "92831",
+                "state": "CA",
+            },
+        )
+
+        order.refresh_from_db()
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(order.payment_status, Order.PaymentStatus.PAID)
+        self.assertTrue(order.payment_reference.startswith("pay_demo_"))
+        self.assertEqual(order.payment_method_label, "Visa ending 4242")
+        self.assertIsNotNone(order.paid_at)
 
 
 class APIAuthenticationTests(TestCase):

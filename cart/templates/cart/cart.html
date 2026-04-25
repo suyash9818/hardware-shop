@@ -1,23 +1,28 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Your Cart{% endblock %}
 {% block content %}
-<div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+<section class="page-hero mb-4">
   <div>
-    <h1 class="mb-1">Your Cart</h1>
-    <p class="text-muted mb-0">Review the items you have selected.</p>
+    <div class="eyebrow"><i class="bi bi-cart3"></i> Cart</div>
+    <h1>Your Cart</h1>
+    <p class="text-muted mb-0">Review selected hardware before checkout.</p>
   </div>
-  <a href="{% url 'product_list' %}" class="btn btn-outline-light">Continue Shopping</a>
-</div>
+  <div class="hero-actions">
+    <a href="{% url 'product_list' %}" class="btn btn-outline-light btn-icon"><i class="bi bi-arrow-left"></i> Continue Shopping</a>
+  </div>
+</section>
 
 <div class="card card-soft">
   <div class="card-body">
     {% for item in items %}
-      <div class="d-flex justify-content-between align-items-center py-3 {% if not forloop.last %}border-bottom{% endif %}">
-        <div>
+      <div class="cart-item-row">
+        <img src="{% static 'images/hardware-hero.png' %}" alt="" class="cart-thumb" loading="lazy">
+        <div class="min-w-0">
           <div class="fw-semibold">{{ item.product.name }}</div>
           <div class="small text-muted">{{ item.product.sku }}</div>
         </div>
-        <div class="text-end">
+        <div class="text-end ms-auto">
           <div>{{ item.quantity }} x ${{ item.product.price }}</div>
           <div class="small text-muted">Line total: ${{ item.line_total }}</div>
         </div>
@@ -27,16 +32,16 @@
     {% endfor %}
 
     <hr>
-    <div class="d-flex justify-content-between align-items-center">
+    <div class="d-flex justify-content-between align-items-center fs-5">
       <strong>Total</strong>
       <strong>${{ total }}</strong>
     </div>
-    
+
     {% if items %}
     <form method="post" action="{% url 'cart:checkout' %}" class="mt-4 text-end">
       {% csrf_token %}
-      <button type="submit" class="btn btn-success">
-        Create Order / Checkout
+      <button type="submit" class="btn btn-success btn-icon" data-loading-label="Creating checkout">
+        <i class="bi bi-credit-card"></i> Checkout & Pay
       </button>
     </form>
     {% endif %}

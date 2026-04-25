@@ -1,35 +1,77 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Products{% endblock %}
 {% block content %}
-<div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+<section class="page-hero mb-4">
   <div>
-    <h1 class="mb-1">Hardware Store</h1>
-    <p class="text-muted mb-0">Browse products, inspect specs, and add items to your cart.</p>
+    <div class="eyebrow"><i class="bi bi-grid-3x3-gap"></i> Catalog</div>
+    <h1>Hardware Store</h1>
+    <p class="text-muted mb-0">Find parts by name, SKU, finish, material, thread, drive, or length.</p>
   </div>
-  <a href="{% url 'cart:view_cart' %}" class="btn btn-primary">Go to Cart</a>
-</div>
+  <div class="hero-actions">
+    <a href="{% url 'cart:view_cart' %}" class="btn btn-primary btn-icon"><i class="bi bi-cart3"></i> Go to Cart</a>
+  </div>
+</section>
 
-<form method="get" action="{% url 'product_list' %}" class="mb-4">
-  <input class="form-control" type="text" name="q" value="{{ query }}" placeholder="Search hardware specs or SKU...">
+<form method="get" action="{% url 'product_list' %}" class="search-shell mb-4">
+  <div class="input-group">
+    <span class="input-group-text"><i class="bi bi-search"></i></span>
+    <input
+      class="form-control"
+      type="search"
+      name="q"
+      value="{{ query }}"
+      placeholder="Search hardware specs or SKU..."
+      data-live-search
+      aria-label="Search products">
+  </div>
+  <div class="d-flex align-items-center justify-content-between gap-2">
+    <span class="badge-soft text-nowrap" data-product-count>{{ products|length }} products</span>
+    <button class="btn btn-outline-secondary btn-sm" type="submit">Search</button>
+  </div>
 </form>
 
-<div class="row g-3">
+<div class="row g-3" data-product-grid>
   {% for product in products %}
-  <div class="col-md-6 col-xl-4">
-    <div class="card card-soft h-100 shadow-sm">
+  <div
+    class="col-md-6 col-xl-4"
+    data-product-card
+    data-search="{{ product.name }} {{ product.sku }} {{ product.description }} {% if product.family %}{{ product.family.name }}{% endif %} {% if product.thread %}{{ product.thread.code }}{% endif %} {% if product.head %}{{ product.head.description }}{% endif %} {% if product.drive %}{{ product.drive.description }}{% endif %} {% if product.material %}{{ product.material.description }}{% endif %} {% if product.feature %}{{ product.feature.description }}{% endif %} {% if product.finish %}{{ product.finish.description }}{% endif %} {% if product.length_mm %}{{ product.length_mm }}{% endif %}">
+    <div class="card card-soft product-card h-100">
       <img
-        src="https://placehold.co/640x420/162033/eaf2ff?text={{ product.name|urlencode }}"
+        src="{% static 'images/hardware-hero.png' %}"
         alt="{{ product.name }}"
         class="product-image"
         loading="lazy">
       <div class="card-body d-flex flex-column">
-        <div class="small text-muted mb-2">{{ product.sku }}</div>
-        <h5>{{ product.name }}</h5>
+        <div class="d-flex justify-content-between gap-3 mb-2">
+          <span class="small text-muted">{{ product.sku }}</span>
+          {% if product.category %}
+            <span class="badge-soft">{{ product.category.name }}</span>
+          {% endif %}
+        </div>
+        <h2 class="h5 mb-2">{{ product.name }}</h2>
         <p class="text-muted flex-grow-1">{{ product.description|default:"No description available."|truncatewords:18 }}</p>
-        <p class="fw-semibold mb-3">${{ product.price }}</p>
-        <div class="d-flex gap-2">
-          <a href="{% url 'product_detail' product.id %}" class="btn btn-dark">View</a>
-          <a href="{% url 'cart:add_to_cart' product.id %}" class="btn btn-success">Add to Cart</a>
+
+        {% if product.family or product.thread or product.head or product.drive or product.material or product.feature or product.finish or product.length_mm %}
+        <div class="product-specs mb-3">
+          {% if product.family %}<span class="spec-chip">Family: {{ product.family.name }}</span>{% endif %}
+          {% if product.thread %}<span class="spec-chip">Thread: {{ product.thread.code }}</span>{% endif %}
+          {% if product.head %}<span class="spec-chip">Head: {{ product.head.description }}</span>{% endif %}
+          {% if product.drive %}<span class="spec-chip">Drive: {{ product.drive.description }}</span>{% endif %}
+          {% if product.material %}<span class="spec-chip">Material: {{ product.material.description }}</span>{% endif %}
+          {% if product.feature %}<span class="spec-chip">Feature: {{ product.feature.description }}</span>{% endif %}
+          {% if product.finish %}<span class="spec-chip">Finish: {{ product.finish.description }}</span>{% endif %}
+          {% if product.length_mm %}<span class="spec-chip">Length: {{ product.length_mm }} mm</span>{% endif %}
+        </div>
+        {% endif %}
+
+        <div class="d-flex align-items-center justify-content-between gap-2 mt-auto">
+          <div class="price-tag">${{ product.price }}</div>
+          <div class="action-row">
+            <a href="{% url 'product_detail' product.id %}" class="btn btn-dark btn-sm btn-icon"><i class="bi bi-eye"></i> View</a>
+            <a href="{% url 'cart:add_to_cart' product.id %}" class="btn btn-success btn-sm btn-icon"><i class="bi bi-cart-plus"></i> Add</a>
+          </div>
         </div>
       </div>
     </div>
@@ -39,5 +81,10 @@
     <div class="alert alert-light border">No products found.</div>
   </div>
   {% endfor %}
+</div>
+
+<div class="surface-panel is-hidden mt-3" data-empty-state>
+  <div class="fw-bold">No matching products</div>
+  <div class="text-muted small">Try a different name, SKU, material, thread, or finish.</div>
 </div>
 {% endblock %}

@@ -1,63 +1,127 @@
 {% extends "base.html" %}
-{% block title %}Hardware Shop - Demo{% endblock %}
+{% load static %}
+{% block title %}Hardware Shop Dashboard{% endblock %}
 {% block content %}
-  <div class="row g-3 align-items-stretch">
-    <div class="col-lg-7">
-      <div class="card card-soft h-100">
-        <div class="card-body">
-          <h1 class="mb-2">Intelligent Hardware-Focused E-Commerce</h1>
-          <p class="text-muted mb-3">
-            A Django prototype for hardware parts that supports dynamic specifications (JSONField),
-            inventory tracking (quantity + optional serialization), and an intelligent fulfillment decision engine.
-          </p>
+  <section class="page-hero image-hero mb-4" style="--hero-image: url('{% static 'images/hardware-hero.png' %}');">
+    <div>
+      <div class="eyebrow"><i class="bi bi-speedometer2"></i> Operations dashboard</div>
+      <h1>Hardware Shop</h1>
+      <p class="text-muted mb-0">
+        Catalog, inventory, orders, supplier availability, manufacturing, and warranty work in one workspace.
+      </p>
+    </div>
+    <div class="hero-actions">
+      <a class="btn btn-primary btn-icon" href="/catalog/products/"><i class="bi bi-grid-3x3-gap"></i> Browse</a>
+      <a class="btn btn-outline-light btn-icon" href="/orders/"><i class="bi bi-receipt"></i> Orders</a>
+      <a class="btn btn-outline-light btn-icon" href="/cart/"><i class="bi bi-cart3"></i> Cart</a>
+    </div>
+  </section>
 
-          <div class="d-flex gap-2 flex-wrap">
-            <a class="btn btn-primary" href="/catalog/products/"><i class="bi bi-grid-3x3-gap me-1"></i>Browse Products</a>
-            <a class="btn btn-outline-light" href="/orders/"><i class="bi bi-receipt me-1"></i>Orders</a>
-            <a class="btn btn-outline-light" href="/api/"><i class="bi bi-braces me-1"></i>API</a>
-            <a class="btn btn-outline-light" href="/admin/"><i class="bi bi-shield-lock me-1"></i>Admin</a>
-          </div>
+  <section class="metric-grid mb-4" aria-label="Shop metrics">
+    {% for stat in stats %}
+      <a class="metric-tile metric-{{ stat.tone }}" href="{{ stat.url }}">
+        <span class="metric-icon"><i class="bi {{ stat.icon }}"></i></span>
+        <span>
+          <span class="metric-value">{{ stat.value }}</span>
+          <span class="metric-label d-block">{{ stat.label }}</span>
+        </span>
+      </a>
+    {% endfor %}
+  </section>
 
-          <hr class="my-4" style="border-color: rgba(255,255,255,.14);">
-          <div class="row g-3">
-            <div class="col-md-6">
-              <div class="p-3 rounded-4" style="background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);">
-                <div class="fw-semibold mb-1"><i class="bi bi-sliders me-1"></i>Dynamic Specs</div>
-                <div class="text-muted small">Store technical attributes as JSON; render spec tables automatically.</div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="p-3 rounded-4" style="background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);">
-                <div class="fw-semibold mb-1"><i class="bi bi-lightning-charge me-1"></i>Decision Engine</div>
-                <div class="text-muted small">On submit, choose inventory vs supplier vs manufacturing with explanation.</div>
-              </div>
-            </div>
-          <a class="btn btn-outline-light" href="/rma/"><i class="bi bi-arrow-counterclockwise me-1"></i>Warranty / RMA</a>
-          </div>
+  <div class="row g-4 align-items-start">
+    <div class="col-xl-8">
+      <section class="mb-4">
+        <div class="section-heading">
+          <h2>Work Queues</h2>
+          <span class="badge-soft"><i class="bi bi-activity"></i> Live counts</span>
         </div>
-      </div>
+        <div class="workflow-grid">
+          <a class="workflow-tile workflow-teal" href="/inventory/dashboard/">
+            <span class="workflow-icon"><i class="bi bi-box-seam"></i></span>
+            <span>
+              <span class="fw-bold d-block">Inventory</span>
+              <span class="workflow-label">{{ available_serial_units }} available serial units</span>
+            </span>
+          </a>
+          <a class="workflow-tile workflow-amber" href="/manufacturing/dashboard/">
+            <span class="workflow-icon"><i class="bi bi-gear-wide-connected"></i></span>
+            <span>
+              <span class="fw-bold d-block">Manufacturing</span>
+              <span class="workflow-label">{{ open_mfg_count }} open orders</span>
+            </span>
+          </a>
+          <a class="workflow-tile workflow-green" href="/pricing/dashboard/">
+            <span class="workflow-icon"><i class="bi bi-truck"></i></span>
+            <span>
+              <span class="fw-bold d-block">Procurement</span>
+              <span class="workflow-label">{{ open_procurement_count }} open orders</span>
+            </span>
+          </a>
+          <a class="workflow-tile" href="/rma/">
+            <span class="workflow-icon"><i class="bi bi-arrow-counterclockwise"></i></span>
+            <span>
+              <span class="fw-bold d-block">RMA</span>
+              <span class="workflow-label">{{ open_rma_count }} active requests</span>
+            </span>
+          </a>
+          <a class="workflow-tile workflow-teal" href="/api/">
+            <span class="workflow-icon"><i class="bi bi-braces"></i></span>
+            <span>
+              <span class="fw-bold d-block">API</span>
+              <span class="workflow-label">REST endpoints</span>
+            </span>
+          </a>
+          <a class="workflow-tile workflow-amber" href="/admin/">
+            <span class="workflow-icon"><i class="bi bi-shield-lock"></i></span>
+            <span>
+              <span class="fw-bold d-block">Admin</span>
+              <span class="workflow-label">Manage records</span>
+            </span>
+          </a>
+        </div>
+      </section>
+
+      <section class="surface-panel">
+        <div class="section-heading">
+          <h2>Recent Orders</h2>
+          <a href="/orders/" class="btn btn-outline-secondary btn-sm">View all</a>
+        </div>
+        {% for order in recent_orders %}
+          <div class="list-row">
+            <div>
+              <a class="fw-bold" href="{% url 'orders:order_detail' order.id %}">Order #{{ order.id }}</a>
+              <div class="small text-muted">{{ order.created_at|date:"M d, Y H:i" }}</div>
+            </div>
+            <div class="text-end">
+              <span class="badge text-bg-info">{{ order.get_status_display }}</span>
+              <div class="small fw-bold mt-1">${{ order.total_usd }}</div>
+            </div>
+          </div>
+        {% empty %}
+          <div class="text-muted">No orders yet.</div>
+        {% endfor %}
+      </section>
     </div>
 
-    <div class="col-lg-5">
-      <div class="card card-soft h-100">
-        <div class="card-body">
-          <h5 class="mb-3">Dashboards</h5>
-          <div class="d-grid gap-2">
-            <a class="btn btn-outline-light" href="/inventory/dashboard/"><i class="bi bi-box-seam me-1"></i>Inventory Dashboard</a>
-            <a class="btn btn-outline-light" href="/manufacturing/dashboard/"><i class="bi bi-gear-wide-connected me-1"></i>Manufacturing Dashboard</a>
-            <a class="btn btn-outline-light" href="/pricing/dashboard/"><i class="bi bi-cash-coin me-1"></i>Cost & Availability Dashboard</a>
-          </div>
-
-          <hr class="my-4" style="border-color: rgba(255,255,255,.14);">
-          <h6 class="mb-2">Quick setup</h6>
-          <ol class="text-muted small mb-0">
-            <li>Run migrations</li>
-            <li>Create a superuser</li>
-            <li>Add Products + Inventory + Supplier Offers (Admin)</li>
-            <li>Create an Order from a Product page, then Submit</li>
-          </ol>
+    <div class="col-xl-4">
+      <section class="surface-panel">
+        <div class="section-heading">
+          <h2>Latest Products</h2>
+          <a href="/catalog/products/" class="btn btn-outline-secondary btn-sm">Open catalog</a>
         </div>
-      </div>
+        {% for product in featured_products %}
+          <div class="list-row">
+            <div class="min-w-0">
+              <a class="fw-bold" href="{% url 'product_detail' product.id %}">{{ product.name }}</a>
+              <div class="small text-muted">{{ product.sku }}{% if product.category %} / {{ product.category.name }}{% endif %}</div>
+            </div>
+            <div class="fw-bold text-nowrap">${{ product.price }}</div>
+          </div>
+        {% empty %}
+          <div class="text-muted">No products in the catalog yet.</div>
+        {% endfor %}
+      </section>
     </div>
   </div>
 {% endblock %}

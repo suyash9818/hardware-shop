@@ -16,7 +16,19 @@ class Order(models.Model):
         READY = "READY", "Ready"
         CANCELLED = "CANCELLED", "Cancelled"
 
+    class PaymentStatus(models.TextChoices):
+        UNPAID = "UNPAID", "Unpaid"
+        PENDING = "PENDING", "Pending"
+        PAID = "PAID", "Paid"
+        FAILED = "FAILED", "Failed"
+        REFUNDED = "REFUNDED", "Refunded"
+
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.DRAFT)
+    payment_status = models.CharField(max_length=20, choices=PaymentStatus.choices, default=PaymentStatus.UNPAID)
+    payment_session_id = models.CharField(max_length=120, blank=True, default="")
+    payment_reference = models.CharField(max_length=120, blank=True, default="")
+    payment_method_label = models.CharField(max_length=80, blank=True, default="")
+    paid_at = models.DateTimeField(null=True, blank=True)
     notes = models.TextField(blank=True, default="")
     created_at = models.DateTimeField(auto_now_add=True)
     submitted_at = models.DateTimeField(null=True, blank=True)

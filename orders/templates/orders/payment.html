@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block title %}Pay Order #{{ order.id }}{% endblock %}
+{% block content %}
+<section class="page-hero mb-4">
+  <div>
+    <div class="eyebrow"><i class="bi bi-shield-check"></i> Secure checkout</div>
+    <h1>Pay Order #{{ order.id }}</h1>
+    <p class="text-muted mb-0">Complete the payment and return to the order for fulfillment.</p>
+  </div>
+  <div class="hero-actions">
+    <a href="{% url 'orders:order_quote' order.id %}?zip={{ zip_code }}&state={{ state }}" class="btn btn-outline-light btn-icon">
+      <i class="bi bi-arrow-left"></i> Quote
+    </a>
+  </div>
+</section>
+
+<div class="row g-4 align-items-start">
+  <div class="col-lg-7">
+    <div class="card card-soft">
+      <div class="card-body">
+        <div class="payment-card-preview mb-4">
+          <div class="d-flex justify-content-between align-items-start">
+            <span class="payment-chip" aria-hidden="true"></span>
+            <span class="badge-soft"><i class="bi bi-lock-fill"></i> {{ payment_session.provider }}</span>
+          </div>
+          <div class="payment-number" data-card-preview="number">•••• •••• •••• ••••</div>
+          <div class="d-flex justify-content-between gap-3">
+            <span data-card-preview="name">CARDHOLDER</span>
+            <span data-card-preview="expiry">MM/YY</span>
+          </div>
+        </div>
+
+        {% if payment_error %}
+          <div class="alert alert-danger">{{ payment_error }}</div>
+        {% endif %}
+
+        {% if order.payment_status == "PAID" %}
+          <div class="alert alert-success mb-0">
+            Payment already approved{% if order.payment_method_label %} with {{ order.payment_method_label }}{% endif %}.
+          </div>
+        {% else %}
+          <form method="post" class="row g-3" data-payment-form>
+            {% csrf_token %}
+            <input type="hidden" name="zip" value="{{ zip_code }}">
+            <input type="hidden" name="state" value="{{ state }}">
+            <input type="hidden" name="session_id" value="{{ payment_session.id }}">
+
+            <div class="col-12">
+              <label class="form-label" for="name">Cardholder Name</label>
+              <input class="form-control" id="name" name="name" autocomplete="cc-name" data-card-name required>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label" for="card_number">Card Number</label>
+              <input class="form-control" id="card_number" name="card_number" inputmode="numeric" autocomplete="cc-number" placeholder="4242 4242 4242 4242" data-card-number required>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label" for="exp_month">Month</label>
+              <input class="form-control" id="exp_month" name="exp_month" inputmode="numeric" autocomplete="cc-exp-month" placeholder="12" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label" for="exp_year">Year</label>
+              <input class="form-control" id="exp_year" name="exp_year" inputmode="numeric" autocomplete="cc-exp-year" placeholder="2030" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label" for="cvc">CVC</label>
+              <input class="form-control" id="cvc" name="cvc" inputmode="numeric" autocomplete="cc-csc" placeholder="123" required>
+            </div>
+
+            <div class="col-12">
+              <button class="btn btn-primary w-100 btn-icon" type="submit" data-loading-label="Processing">
+                <i class="bi bi-lock"></i> Pay ${{ grand_total }}
+              </button>
+            </div>
+          </form>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-5">
+    <div class="card card-soft">
+      <div class="card-body">
+        <h2 class="h5 mb-3">Order Summary</h2>
+        {% for item in order.items.all %}
+          <div class="list-row">
+            <div>
+              <div class="fw-bold">{{ item.product.name }}</div>
+              <div class="small text-muted">{{ item.quantity }} x ${{ item.unit_price_usd }}</div>
+            </div>
+            <strong>${{ item.line_total }}</strong>
+          </div>
+        {% endfor %}
+        <div class="list-row"><span>Shipping</span><strong>${{ shipping_amount }}</strong></div>
+        <div class="list-row"><span>Estimated tax</span><strong>${{ tax_amount }}</strong></div>
+        <div class="d-flex justify-content-between fs-5 pt-3">
+          <span>Total</span>
+          <strong>${{ grand_total }}</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
