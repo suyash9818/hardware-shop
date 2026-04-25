@@ -1,0 +1,1651 @@
+\documentclass[12pt,letterpaper,oneside,openany]{book}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+\setlength{\parindent}{20pt}
+\setlength{\parskip}{0.6em}
+
+\usepackage{cite}
+\usepackage{graphicx}
+\graphicspath{{figures/}{../docs/figures/}{docs/figures/}}
+\usepackage{float}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{caption}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{ragged2e}
+\usepackage[protrusion=true,expansion=false]{microtype}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue,citecolor=black,plainpages=false,pdfpagelabels,hypertexnames=false]{hyperref}
+
+\titleformat{\chapter}[hang]
+  {\normalfont\LARGE\bfseries\raggedright}
+  {Chapter \thechapter:}{0.5em}{}
+\titleformat{\section}[block]
+  {\normalfont\Large\bfseries\raggedright}
+  {\thesection}{0.5em}{}
+\titleformat{\subsection}[block]
+  {\normalfont\large\bfseries\raggedright}
+  {\thesubsection}{0.5em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[R]{\thepage}
+
+\lstdefinestyle{reportstyle}{
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  frame=single,
+  columns=fullflexible,
+  keepspaces=true,
+  showstringspaces=false
+}
+\lstset{style=reportstyle}
+
+\newcommand{\placeholderbox}[1]{%
+  \fbox{%
+    \parbox[c][2.6in][c]{0.88\linewidth}{%
+      \centering
+      Screenshot / diagram placeholder\\[0.4em]
+      \path{#1}\\[0.4em]
+      Add this file to the \texttt{figures/} folder
+    }%
+  }%
+}
+
+\newcommand{\safeimage}[2][0.92\textwidth]{%
+  \IfFileExists{\detokenize{docs/figures/#2}}{\includegraphics[width=#1]{\detokenize{docs/figures/#2}}}{%
+    \IfFileExists{\detokenize{figures/#2}}{\includegraphics[width=#1]{\detokenize{figures/#2}}}{\placeholderbox{#2}}%
+  }%
+}
+
+\newcommand{\reportfigure}[4][0.92\textwidth]{%
+\begin{figure}[H]
+\centering
+\safeimage[#1]{#2}
+\caption{#3}
+\label{#4}
+\end{figure}
+}
+
+\begin{document}
+
+\begin{titlepage}
+\centering
+\vspace{0.8cm}
+\IfFileExists{\detokenize{docs/figures/csuf_logo.png}}{\includegraphics[height=5.8cm]{\detokenize{docs/figures/csuf_logo.png}}}{%
+  \IfFileExists{\detokenize{figures/csuf_logo.png}}{\includegraphics[height=5.8cm]{\detokenize{figures/csuf_logo.png}}}{\placeholderbox{csuf_logo.png}}%
+}\par
+
+\vspace{0.75cm}
+{\Large Intelligent Hardware-Focused E-Commerce Platform (Django)\par}
+\vspace{0.35cm}
+{\Large Final Project Report\par}
+
+\vspace{0.6cm}
+{By}\par
+\vspace{0.3cm}
+{\large Suyash Jadhav\par}
+
+\vspace{0.75cm}
+{\large A PROJECT REPORT SUBMITTED IN PARTIAL FULFILLMENT}\par
+{\large OF THE REQUIREMENTS FOR THE COURSE}\par
+{\large CPSC-597: Project (Seminar)}\par
+
+\vspace{0.6cm}
+{\large Master of Science in Computer Science}\par
+\vspace{0.5cm}
+{\large CALIFORNIA STATE UNIVERSITY, FULLERTON}\par
+\vspace{0.5cm}
+{April, 2026}\par
+
+\vspace{0.5cm}
+{\large SUPERVISOR}\par
+{Dr. Duy H. Ho}\par
+
+\vfill
+{\itshape Copyright Suyash Jadhav, 2026}
+\end{titlepage}
+
+\frontmatter
+
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+
+\begin{justifying}
+Traditional e-commerce platforms are usually optimized for consumer products,
+where catalog discovery depends largely on brand, price, popularity, and image
+presentation. Hardware and industrial product domains operate under a different
+set of requirements. Product identity often depends on engineering attributes
+such as thread size, voltage, pitch, material grade, tolerance, connector type,
+and dimensional constraints. Purchase decisions also depend on compatibility,
+availability, procurement lead time, and inventory traceability. These needs
+are not served well by rigid catalog schemas or purely descriptive product
+pages. This project therefore investigates the design and implementation of an
+Intelligent Hardware-Focused E-Commerce Platform using Django and Django REST
+Framework.
+\end{justifying}
+
+\begin{justifying}
+The final project extends an earlier catalog-and-inventory prototype into a
+broader workflow-oriented system. The platform now supports modular
+applications for catalog, cart, inventory, orders, pricing, manufacturing, and
+returns management. Products are modeled with a combination of relational core
+fields and a JSON-based specification structure that allows hardware-specific
+attributes to vary by product type. The system includes product browsing,
+search, product detail rendering, compatibility-oriented presentation,
+session-based cart management, order creation, order submission, and a
+rule-based fulfillment decision engine that selects inventory, supplier, or
+manufacturing sources. Dashboards summarize operational state for inventory,
+pricing, and manufacturing, a demo-ready quote flow estimates payment,
+shipping, and tax behavior, and a browsable REST API exposes the system
+programmatically.
+\end{justifying}
+
+\begin{justifying}
+Validation depth also improved through framework checks, migration consistency
+checks, route verification, and thirteen automated functional tests. These
+tests cover specification-aware search, compatibility retrieval, cart quantity
+accumulation, order totals, draft order creation, inventory-backed fulfillment,
+supplier and manufacturing decision paths, serialized inventory handling, RMA
+creation, quote-page rendering, and authenticated API access using JWT and DRF
+token flows. The current system remains a prototype rather than a production
+storefront, but it demonstrates a coherent end-to-end hardware-commerce
+workflow with explicit limitations, measurable results, and a credible path for
+future extension.
+\end{justifying}
+
+\noindent
+Key Words: Hardware E-commerce; Django; Django REST Framework; Dynamic
+Specifications; Compatibility; Inventory Tracking; Fulfillment Decision Engine;
+Automated Testing.
+
+\chapter*{Acknowledgments}
+\addcontentsline{toc}{chapter}{Acknowledgments}
+
+\begin{justifying}
+This final report was prepared as part of the project seminar deliverable. The
+project benefited from structured guidance through the course, official
+framework documentation, and iterative implementation feedback gathered during
+testing and debugging. The modular nature of the system also made it possible
+to reflect on the relationship between backend engineering, frontend
+presentation, and report writing in a single integrated workflow.
+\end{justifying}
+
+\tableofcontents
+\listoffigures
+\listoftables
+\lstlistoflistings
+
+\mainmatter
+
+\chapter{Introduction}
+
+\section{Motivation}
+
+\begin{justifying}
+Hardware-focused digital commerce differs sharply from general online retail.
+In a typical retail setting, the key user questions are often simple: what is
+the item, how much does it cost, how is it rated, and how fast can it be
+delivered. In a hardware environment, a much richer set of questions appears.
+Will this connector fit the existing socket. Does this fastener match the
+thread and pitch required by the assembly. Is the sensor compatible with the
+operating voltage in the target system. Is stock available now, or must the
+item be procured or manufactured. These questions reveal that a hardware
+platform is not only a sales interface, but also a technical decision-support
+environment.
+\end{justifying}
+
+\begin{justifying}
+Many general-purpose e-commerce systems treat product attributes as either fixed
+database columns or loosely formatted free text. Both approaches create
+problems. A rigid schema becomes difficult to extend when new product families
+introduce new attributes. Free text is easier to store but harder to query,
+harder to validate, and harder to use for compatibility checks. This project is
+motivated by the need for a middle-ground architecture that combines stable core
+relational data with a flexible dynamic specification layer.
+\end{justifying}
+
+\section{Problem Statement}
+
+\begin{justifying}
+The problem addressed in this project is the design of a flexible and modular
+hardware-commerce platform that can represent technical product specifications,
+support compatibility-oriented browsing, maintain inventory visibility and
+traceability, and provide the beginnings of realistic downstream fulfillment
+logic. A working prototype must go beyond data storage. It must expose
+catalogue views, search, shopping cart behavior, order creation, and a
+transparent decision process that explains whether the system can fulfill an
+order from existing stock or whether the request should move to supplier or
+manufacturing workflows.
+\end{justifying}
+
+\section{Research and Design Questions}
+
+\begin{itemize}[leftmargin=0.4in]
+    \item How can hardware products be modeled without creating a new database schema for each product family.
+    \item How can the system remain modular while still supporting end-to-end workflow behavior.
+    \item What level of compatibility support is reasonable at a prototype stage without introducing excessive complexity.
+    \item How can inventory, pricing, and manufacturing models be connected to order submission in a way that remains understandable and demonstrable.
+    \item What evidence is needed to show that the prototype is not only structurally correct but also functionally meaningful.
+\end{itemize}
+
+\section{Objectives}
+
+\begin{enumerate}[leftmargin=0.4in]
+    \item Build a hardware-oriented catalog model with dynamic JSON-based specifications.
+    \item Support product browsing, search, and compatibility-oriented presentation.
+    \item Provide cart and order workflows that connect catalog selection to fulfillment logic.
+    \item Maintain inventory visibility and optional serialized traceability.
+    \item Model supplier and manufacturing planning data for downstream order decisions.
+    \item Expose the system through a browsable REST API.
+    \item Add automated tests to validate core end-to-end behaviors.
+\end{enumerate}
+
+\section{Final Project Contributions}
+
+\begin{justifying}
+Compared with the earlier seminar submission, the current version makes several
+practical contributions. First, it introduces session-based cart behavior and
+order submission, which transforms the project from a mostly informational
+prototype into a transactional workflow. Second, it adds a rule-based
+fulfillment engine that connects orders with inventory, supplier offers, and
+manufacturing cost profiles. Third, it exposes system resources through Django
+REST Framework, supplements them with a lightweight API documentation page, and
+supports authenticated inspection through DRF token and JWT-based routes.
+Fourth, it extends the operational scope with demo-ready payment, shipping, and
+tax estimation plus a basic warranty/RMA workflow. Finally, it improves the
+verification story through thirteen automated tests, which provide a stronger
+quality-assurance layer than the earlier version.
+\end{justifying}
+
+\section{Organization of the Report}
+
+\begin{justifying}
+The remainder of the report is organized as follows. Chapter 2 presents related
+work and literature relevant to hardware product modeling, compatibility,
+traceability, and rapid web-system prototyping. Chapter 3 defines the system
+requirements, scope, and methodology. Chapter 4 describes the architecture and
+major modules. Chapter 5 explains the data model and persistence strategy.
+Chapter 6 describes the implemented application features with screenshots and
+workflow details. Chapter 7 focuses on the API layer and integration readiness.
+Chapter 8 presents data analysis, testing, and evaluation results. Chapter 9
+provides a discussion of the results and design tradeoffs. Chapter 10 discusses
+limitations and threats to validity. Chapter 11 presents future work, and
+Chapter 12 concludes the report. A short appendix retains only practical
+validation material rather than draft-writing notes.
+\end{justifying}
+
+\chapter{Related Work and Literature Review}
+
+\section{Hardware Catalog Complexity}
+
+\begin{justifying}
+Hardware catalogs are naturally heterogeneous. A fastener uses attributes such
+as thread, pitch, length, coating, and material grade. An electrical connector
+uses pin count, voltage, current rating, ingress protection, and contact type.
+A sensor uses measurement range, supply voltage, protocol, and mounting
+details. A rigid relational schema that attempts to store all such fields at
+once quickly becomes sparse and difficult to maintain. At the same time, a
+fully unstructured text-only representation weakens search and validation. This
+creates a natural need for hybrid modeling, which aligns with prior
+configuration-oriented work in e-commerce decision support \cite{scholz-config}.
+\end{justifying}
+
+\begin{justifying}
+The system developed in this project addresses this challenge by storing core
+commercial fields such as SKU, name, category, and price in relational columns
+while storing variable technical attributes inside a JSON field. This approach
+does not solve every problem automatically, but it creates a practical
+foundation. It allows categories to evolve, it reduces migration frequency for
+minor attribute changes, and it makes it easier to experiment with different
+hardware families during an academic prototype stage.
+\end{justifying}
+
+\section{Dynamic Specifications and Schema Flexibility}
+
+\begin{justifying}
+Flexible data representations are commonly used when product structures vary
+significantly. In this project, flexibility is not pursued as an abstract
+database ideal but as a direct response to hardware diversity. The dynamic
+specification field allows a product page to render a technical table from
+key-value pairs without requiring a special template or model for every product
+type. In practice, this means that a bolt can expose \texttt{thread},
+\texttt{pitch}, and \texttt{material}, while a sensor can expose
+\texttt{voltage}, \texttt{range}, and \texttt{protocol}, all through the same
+application structure.
+\end{justifying}
+
+\begin{justifying}
+The tradeoff is that application logic must take responsibility for validation,
+search behavior, and compatibility rules. This tradeoff is acceptable in a
+prototype because it shifts complexity from schema maintenance to application
+logic, where the developer can iterate more rapidly. It also aligns well with
+Django's ability to render flexible content through templates and class-based or
+function-based views, while retaining native support for JSON-backed model
+fields in the framework stack \cite{django-docs}.
+\end{justifying}
+
+\section{Compatibility-Oriented Commerce}
+
+\begin{justifying}
+Compatibility is one of the defining properties of hardware commerce. A user
+rarely purchases a technical part in isolation. Instead, the user wants to know
+whether the selected item will function inside an assembly, fit an interface,
+or satisfy a specification requirement. Full compatibility systems can become
+extremely sophisticated. They may involve formal constraints, engineering
+standards, graph relationships, or domain expert rules. Recommender-system
+literature shows why more structured or knowledge-based approaches become
+valuable when products have rich attributes and user decisions are constrained
+by technical requirements \cite{scholz-config,zhang-ai-rec}.
+\end{justifying}
+
+\begin{justifying}
+The present system does not attempt to implement a complete compatibility
+engine. Instead, it introduces compatibility-oriented presentation through a modest,
+interpretable heuristic. Products that share selected specification values, such
+as \texttt{thread} or \texttt{voltage}, can be surfaced as potentially
+compatible candidates in the product detail view. This provides educational
+value and establishes a usable prototype foundation without overpromising full
+engineering correctness. The dedicated \texttt{Compatibility} model also keeps
+the design open for future explicit relations.
+\end{justifying}
+
+\section{Inventory Traceability and Serialized Units}
+
+\begin{justifying}
+Inventory control in hardware settings often extends beyond a simple numeric
+quantity. Many commodity items can be managed effectively through count-based
+tracking, but other items require individual traceability because of warranty,
+quality assurance, regulatory compliance, maintenance records, or RMA handling.
+For such cases, serialized unit tracking becomes important. The design in this
+project therefore supports both aggregate stock and optional serial units. This
+is consistent with broader manufacturing-traceability literature, which shows
+that unit-level traceability and lifecycle visibility are important in quality,
+complaint handling, and operational control \cite{traceability-review}.
+\end{justifying}
+
+\begin{justifying}
+This hybrid strategy is useful from an educational perspective as well. It
+demonstrates that inventory design is not a single-schema decision. Different
+product types justify different traceability levels, and the platform must be
+able to support both without forcing all items into a heavyweight serialization
+workflow.
+\end{justifying}
+
+\section{Web Framework and API Support}
+
+\begin{justifying}
+Django is a strong fit for this project because it provides clear model-view
+separation, a mature ORM, a built-in admin interface, URL routing, template
+rendering, and testing tools \cite{django-docs}. Django REST Framework extends
+these capabilities with serializers, viewsets, routers, permission classes, and
+a browsable API \cite{drf-docs}. For a project that needs both human-facing
+pages and machine-accessible endpoints, this combination is highly effective.
+\end{justifying}
+
+\begin{justifying}
+The current project also uses Simple JWT endpoints and DRF token
+authentication-related routes \cite{simplejwt-docs}. The API defaults to open
+resource access for development convenience, but the report now documents a
+working authenticated endpoint at \texttt{/api/auth/me/} that accepts either
+JWT bearer tokens or DRF auth tokens. This reflects the project's current
+prototype position more accurately than the earlier draft wording.
+\end{justifying}
+
+\section{Knowledge-Based Decision Support in E-Commerce}
+
+\begin{justifying}
+The present project is also connected to a broader literature on
+knowledge-based and AI-assisted recommendation systems. Zhang, Lu, and Jin
+survey the way recommender systems evolve from simple content matching toward
+more knowledge-rich and explainable approaches when user needs become more
+specific and item representations become more complex \cite{zhang-ai-rec}. This
+observation is relevant to hardware commerce because the value of a suggested
+item depends not only on similarity but also on whether technical requirements
+can be satisfied.
+\end{justifying}
+
+\begin{justifying}
+Scholz et al. argue that configuration-oriented recommendation is especially
+useful when shoppers must reason about multiple constrained attributes rather
+than make purely preference-driven selections \cite{scholz-config}. The current
+seminar project does not implement a full product configurator, but it adopts
+the same spirit by treating dynamic specifications, compatibility hints, and
+fulfillment choices as interconnected decision-support artifacts. This makes
+the prototype more appropriate for technical commerce than a generic retail
+catalog would be.
+\end{justifying}
+
+\section{Positioning of the Present Work}
+
+\begin{justifying}
+A seminar report must position a prototype honestly with respect to prior work
+and practical constraints. The present system therefore combines ideas from
+knowledge-based recommendation, configurable e-commerce support, and
+traceability-oriented inventory design without claiming to be a complete
+industrial platform. Placeholder images from a lightweight image service are
+used to keep the user interface coherent without requiring a large media
+collection \cite{placeholdco}. This is not a production strategy, but it is an
+effective prototype strategy for demonstrating architecture, workflow, and
+evaluation evidence in a final academic submission. In that sense, the project
+is best understood as a scoped synthesis of configurable recommendation and
+traceability concepts rather than a fully optimized recommender platform
+\cite{scholz-config,zhang-ai-rec,traceability-review}.
+\end{justifying}
+
+\chapter{Requirements, Scope, and Methodology}
+
+\section{Development Methodology}
+
+\begin{justifying}
+The project follows an iterative prototype methodology. Instead of attempting to
+design every subsystem in full detail before implementation, each development
+iteration adds a bounded layer of capability and then stabilizes it through
+debugging and verification. This approach is appropriate for a seminar project
+because it supports continuous demonstration, clear before-and-after
+comparisons, and incremental scope control. The move from a catalog-only
+prototype to a workflow-oriented system in the final project reflects this
+methodology.
+\end{justifying}
+
+\section{Functional Requirements}
+
+\begin{enumerate}[leftmargin=0.4in]
+    \item The system shall store hardware categories and products with dynamic specifications.
+    \item The system shall provide list and detail views for products.
+    \item The system shall provide a search route that can match text present in product identity and specifications.
+    \item The system shall display compatibility-oriented suggestions on product detail pages.
+    \item The system shall support session-based cart management.
+    \item The system shall support draft order creation from the catalog.
+    \item The system shall support order submission and order status transitions.
+    \item The system shall select a fulfillment source based on inventory, supplier, or manufacturing data.
+    \item The system shall track inventory and optionally support serialized units.
+    \item The system shall expose data through REST API endpoints.
+    \item The system shall include automated tests for major user and workflow paths.
+\end{enumerate}
+
+\section{Non-Functional Requirements}
+
+\begin{itemize}[leftmargin=0.4in]
+    \item \textbf{Modularity:} major business capabilities should be isolated into Django apps.
+    \item \textbf{Extensibility:} new specification keys should not force schema redesign.
+    \item \textbf{Transparency:} order decisions should be explainable through visible notes and statuses.
+    \item \textbf{Usability:} the project should be demonstrable through human-readable pages and API screens.
+    \item \textbf{Verifiability:} core behaviors should be testable through Django test cases.
+    \item \textbf{Maintainability:} templates, views, and models should remain readable enough for future extension.
+\end{itemize}
+
+\section{Scope Boundaries}
+
+\begin{justifying}
+The final project intentionally does not attempt to solve all
+enterprise-commerce problems. The current scope excludes production payment
+processing, production-grade shipping integration, jurisdiction-specific tax
+computation, customer-account checkout, strict permission design across all API
+resources, and a fully operational reverse-logistics workflow. Although some of
+these topics are represented through stubs or basic workflows, keeping them
+within prototype scope keeps the implementation aligned with the academic
+purpose of demonstrating architecture, data design, and core workflow
+behavior.
+\end{justifying}
+
+\section{Prototype Assumptions}
+
+\begin{itemize}[leftmargin=0.4in]
+    \item The project uses SQLite as the development database.
+    \item Product images are simulated through generated placeholders.
+    \item Compatibility support is heuristic and illustrative rather than fully authoritative.
+    \item The cart is session-based and does not require login.
+    \item Most API endpoints remain open in development, while a small authenticated endpoint demonstrates token handling.
+    \item Test data is created internally through Django tests rather than imported from a large benchmark dataset.
+\end{itemize}
+
+\section{Evidence Strategy}
+
+\begin{justifying}
+To satisfy final submission expectations, the project uses several forms of
+evidence: working pages, screenshots, route verification, framework checks,
+migration checks, and automated tests. This combination is important.
+Screenshots help communicate the implemented workflow, but tests and route
+checks provide stronger technical credibility. The report therefore includes
+both narrative evidence and structured validation summaries.
+\end{justifying}
+
+\section{Evaluation Methodology}
+
+\begin{justifying}
+The evaluation approach for this project is intentionally mixed-method. It does
+not rely on a single benchmark score because the prototype spans several
+concerns at once: data modeling, user-facing workflow, API exposure, and
+operational planning logic. The report therefore treats evidence as layered.
+Framework checks and migrations evaluate structural correctness. Route
+verification evaluates deployment completeness. Automated tests evaluate
+functional correctness on controlled scenarios. Screenshots and dashboards
+evaluate whether the implemented behavior is visible and interpretable to a
+reviewer.
+\end{justifying}
+
+\begin{justifying}
+This methodology is appropriate for a seminar project because it balances
+engineering rigor with scope realism. A full industrial evaluation would
+require larger datasets, realistic demand traces, user studies, security
+audits, and performance testing under load. Those are beyond the current
+project scope. However, the layered evidence strategy still provides enough
+coverage to support reasoned conclusions about what the prototype already does
+well and where it remains limited.
+\end{justifying}
+
+\chapter{System Architecture}
+
+\section{High-Level Architecture}
+
+\begin{justifying}
+The system follows a modular Django architecture built around separate apps for
+catalog, cart, inventory, orders, pricing, manufacturing, and RMA handling.
+These apps are connected by shared product identifiers and by the
+order-submission workflow. The project-level URL configuration exposes app
+routes, token endpoints, the home page, and the REST API. SQLite is used as
+the persistence layer during development, Django templates provide the
+frontend, and Django REST Framework provides the API layer.
+\end{justifying}
+
+\reportfigure{architecture_diagram_checkpoint3.png}
+{High-level architecture of the final Django prototype, showing the
+relationship among catalog, cart, inventory, orders, pricing, manufacturing,
+RMA, user-facing pages, and API endpoints. The diagram emphasizes that the
+project is not a single monolith but a set of cooperating apps connected
+through shared models and order-driven workflow transitions.}
+{fig:architecture}
+
+\section{App-Level Responsibilities}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|p{1.5in}|p{4.5in}|}
+\hline
+\textbf{App} & \textbf{Primary Responsibility} \\ \hline
+Catalog & Category and product management, dynamic specifications, search, product detail rendering, and compatibility-oriented display. \\ \hline
+Cart & Session-linked cart creation, item accumulation, and cart presentation. \\ \hline
+Inventory & Stock quantity tracking, serialized-unit management, and inventory dashboard summaries. \\ \hline
+Orders & Draft and submitted order lifecycle, line-item storage, order totals, and order detail pages. \\ \hline
+Pricing & Supplier records, supplier offers, cost profiles, procurement orders, and pricing dashboard summaries. \\ \hline
+Manufacturing & Manufacturer records, manufacturing orders, and manufacturing dashboard summaries. \\ \hline
+RMA & Basic warranty and return request management tied to products, orders, and serial units. \\ \hline
+API & Resource exposure through Django REST Framework routers, plus a custom API docs page. \\ \hline
+\end{tabular}
+\caption{Major application responsibilities in the final project implementation.}
+\label{tab:app_responsibilities}
+\end{table}
+
+\section{Routing Design}
+
+\begin{justifying}
+The routing structure is simple but expressive. The root route serves the home
+page. Catalog routes expose browsing, product detail, and search. Cart and
+order routes support session-based commerce flow. Inventory, pricing, and
+manufacturing routes expose dashboard pages aimed at management or
+demonstration. API routes expose the same core entities through REST endpoints.
+JWT and token-auth routes are configured at the project level.
+\end{justifying}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|p{2.6in}|p{2.7in}|}
+\hline
+\textbf{Representative Route} & \textbf{Purpose} \\ \hline
+\texttt{/} & Home page \\ \hline
+\texttt{/catalog/} & Catalog landing page \\ \hline
+\texttt{/catalog/products/} & Product list \\ \hline
+\texttt{/catalog/search/?q=M12} & Search route \\ \hline
+\texttt{/cart/} & Cart page \\ \hline
+\texttt{/orders/} & Orders list \\ \hline
+\texttt{/inventory/dashboard/} & Inventory dashboard \\ \hline
+\texttt{/pricing/dashboard/} & Pricing dashboard \\ \hline
+\texttt{/manufacturing/dashboard/} & Manufacturing dashboard \\ \hline
+\texttt{/rma/} & RMA list page \\ \hline
+\texttt{/api/} & API root \\ \hline
+\texttt{/api/docs/} & API docs page \\ \hline
+\texttt{/api/auth/me/} & Authenticated user inspection endpoint \\ \hline
+\end{tabular}
+\caption{Representative routes exposed by the current project.}
+\label{tab:routes}
+\end{table}
+
+\section{Request Flow Overview}
+
+\begin{justifying}
+The user-facing request flow begins at the home page or catalog listing. A
+user can search, open a product detail page, add an item to the cart, or create
+a draft order directly from the product page. When the user submits the order,
+the system computes a fulfillment decision and updates stock or planning records
+accordingly. In parallel, management views and APIs expose internal state for
+inspection. This architecture keeps the project easy to explain because each app
+plays a visible role in the flow.
+\end{justifying}
+
+\begin{algorithm}[H]
+\caption{Simplified user-facing workflow}
+\begin{algorithmic}[1]
+\State User opens catalog
+\State User searches or browses products
+\State User selects a product detail page
+\State User adds item to cart or creates draft order
+\State User submits order
+\State System evaluates inventory, supplier offers, and manufacturing profiles
+\State System records fulfillment notes and updates stock or planning records
+\State User or evaluator views order detail, quote, dashboard, or RMA pages
+\end{algorithmic}
+\label{alg:userflow}
+\end{algorithm}
+
+\section{Development Environment}
+
+\begin{justifying}
+The project uses Django with SQLite in a local development environment. This is
+appropriate for rapid prototype iteration because it minimizes setup overhead
+and simplifies migration management. The project also uses static templates,
+CSS, and a small number of placeholder-media decisions that keep the interface
+coherent without introducing deployment-specific storage concerns. While SQLite
+is not intended as a final production database for a complex commerce platform,
+it is suitable for current development and testing tasks \cite{sqlite-docs}.
+\end{justifying}
+
+\chapter{Data Model and Persistence Design}
+
+\section{Catalog Models}
+
+\begin{justifying}
+The catalog layer centers on the \texttt{Category} and \texttt{Product} models.
+\texttt{Category} organizes products with a name and slug. \texttt{Product}
+stores the key commercial and descriptive data needed by the rest of the
+system. Each product has a SKU, name, category, price, optional description,
+creation timestamp, and a JSON field named \texttt{specs}. This structure
+allows a unified catalog implementation across multiple hardware families.
+\end{justifying}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|p{1.8in}|p{1.6in}|p{2.6in}|}
+\hline
+\textbf{Model} & \textbf{Field} & \textbf{Purpose} \\ \hline
+Category & name, slug & Human-readable grouping and URL-friendly identity. \\ \hline
+Product & sku & Stable unique identifier for product logic. \\ \hline
+Product & name & User-facing product title. \\ \hline
+Product & category & Relational grouping. \\ \hline
+Product & price\_usd & Commercial price field. \\ \hline
+Product & description & Human-readable narrative description. \\ \hline
+Product & specs & Dynamic JSON specification data. \\ \hline
+Product & created\_at & Timestamp for creation tracking. \\ \hline
+\end{tabular}
+\caption{Core catalog fields used in the final project prototype.}
+\label{tab:catalog_fields}
+\end{table}
+
+\subsection{Example Product Specification}
+
+\begin{justifying}
+The JSON field permits per-product variation. A connector product can store
+thread and voltage keys, while a tool product can store an empty specification
+object until more technical metadata is available. This flexibility supports
+progressive enrichment of the catalog.
+\end{justifying}
+
+\begin{lstlisting}[caption={Representative JSON-style product specifications},label={lst:jsonspec}]
+{
+  "thread": "M12",
+  "voltage": "24V",
+  "material": "Stainless Steel",
+  "ip_rating": "IP67"
+}
+\end{lstlisting}
+
+\section{Compatibility Representation}
+
+\begin{justifying}
+The project includes a \texttt{Compatibility} model and also computes a
+heuristic compatibility list in product detail views by comparing selected
+attributes between products. The current implementation is intentionally light.
+It is designed to make compatibility visible in the interface and testable in
+the codebase without claiming complete engineering validation.
+\end{justifying}
+
+\section{Cart Models}
+
+\begin{justifying}
+The cart design uses a session-based approach. A \texttt{Cart} stores a session
+identifier, while \texttt{CartItem} stores the selected product and quantity.
+This approach keeps the prototype workflow simple and avoids premature
+dependence on customer-account logic. It also supports a clean demonstration:
+multiple adds of the same item increment quantity, and the cart page renders
+line totals.
+\end{justifying}
+
+\section{Order Models}
+
+\begin{justifying}
+Orders are modeled through \texttt{Order} and \texttt{OrderItem}. The order
+stores status, notes, timestamps, and optional user association. The item model
+stores a reference to the product, quantity, and unit price in USD. Order
+totals are computed dynamically by summing line totals. This design supports
+flexible creation of draft orders, status transitions during submission, and
+clear rendering in order detail pages.
+\end{justifying}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|p{1.9in}|p{3.9in}|}
+\hline
+\textbf{Order Status} & \textbf{Meaning} \\ \hline
+\texttt{DRAFT} & Order created but not yet submitted. \\ \hline
+\texttt{SUBMITTED} & Order has been sent into fulfillment logic. \\ \hline
+\texttt{RESERVED} & Inventory or capacity has been reserved. \\ \hline
+\texttt{IN\_PRODUCTION} & Manufacturing has been selected and initiated. \\ \hline
+\texttt{FULFILLED} & Order can be fulfilled from inventory or has been completed. \\ \hline
+\texttt{READY} & Order is prepared for the next downstream step. \\ \hline
+\texttt{CANCELLED} & Order has been cancelled. \\ \hline
+\end{tabular}
+\caption{Representative order statuses in the current design.}
+\label{tab:order_statuses}
+\end{table}
+
+\section{Inventory Models}
+
+\begin{justifying}
+The inventory app models two related but distinct ideas. \texttt{StockItem}
+stores the aggregate quantity of a product at a warehouse and records whether
+that item is serialized. \texttt{SerialUnit} then stores individual serial
+numbers and state transitions for serialized products. This split is conceptually
+useful because it avoids placing serialization overhead on all products while
+still supporting traceability where required.
+\end{justifying}
+
+\section{Pricing and Procurement Models}
+
+\begin{justifying}
+Supplier-side planning is represented through four core models: supplier
+records, supplier offers, cost-and-availability profiles, and procurement
+orders. Supplier offers store purchase cost, minimum order quantity, available
+quantity, and lead time. Cost profiles capture internal or contract
+manufacturing cost and lead time plus reorder thresholds. Procurement orders
+represent planned external replenishment actions created when a supplier path
+is selected.
+\end{justifying}
+
+\section{Manufacturing Models}
+
+\begin{justifying}
+Manufacturing-side planning is represented through manufacturer records and
+manufacturing-order records. A manufacturer record stores production partner
+identity, while a manufacturing order records product, quantity, unit cost,
+status, and expected delivery. This model is intentionally simple but remains
+sufficiently expressive for seminar demonstration and evaluation.
+\end{justifying}
+
+\section{Warranty and RMA Models}
+
+\begin{justifying}
+The \texttt{RMA} model extends the project beyond initial order fulfillment and
+into post-purchase support. Each record can reference a product, order, and
+optionally a serialized unit, along with a reason, status, and timestamps. This
+is intentionally a basic workflow rather than a full enterprise returns module,
+but it is sufficient to demonstrate how traceability and customer-support
+records can connect back to the same product and order data used elsewhere in
+the platform.
+\end{justifying}
+
+\section{Persistence and Migration Strategy}
+
+\begin{justifying}
+The project relies on Django migrations for schema consistency. During this
+finalization phase, additional migrations were added to align models with current
+application behavior and to register newly activated modules such as the cart
+application. Migration verification is especially important in a modular
+project, because schema drift across apps can create import errors, route
+failures, and confusing runtime behavior. The project therefore includes
+explicit verification through \texttt{makemigrations --check --dry-run} and
+\texttt{migrate --noinput}.
+\end{justifying}
+
+\chapter{Application Implementation}
+
+\section{Catalog Application}
+
+\begin{justifying}
+The catalog application is the primary entry point into the platform. It
+implements the home page, product listing, product search, and product detail
+views. The listing page accepts a query string and filters products by SKU,
+name, and specification content. The detail page renders a specification table,
+compatibility-oriented suggestions, and actions that connect the product to the
+cart and order workflows.
+\end{justifying}
+
+\reportfigure{homepage_checkpoint3.png}
+{Current home page used as the landing point for the project. The page now acts
+as a hub into multiple operational modules rather than only a simple catalog
+summary, which makes the system easier to demonstrate in a seminar setting.}
+{fig:homepage}
+
+\reportfigure{catalog_products_checkpoint3.png}
+{Catalog listing with search and placeholder product images. The card
+presentation is more complete than the earlier version and provides stronger
+visual evidence for how dynamic specifications can still support a coherent
+frontend experience.}
+{fig:catalog_products_2}
+
+\subsection{Search Design}
+
+\begin{justifying}
+Search is intentionally lightweight but useful. It accepts a text query and
+looks for matches in identity fields and the serialized form of product specs.
+This is not yet a high-performance or semantically ranked search engine, but it
+demonstrates the key point that dynamic specifications can still participate in
+user-facing discovery. For a seminar project, that is an important proof of
+concept.
+\end{justifying}
+
+\subsection{Compatibility-Oriented Detail View}
+
+\begin{justifying}
+The detail page identifies compatible candidates by checking whether products
+share selected specification values such as thread or voltage. This feature is
+intentionally framed as compatibility-oriented rather than absolute
+compatibility validation. The goal is to show how the data model can support
+technical decision support, not to claim a fully validated engineering rules
+engine at this stage.
+\end{justifying}
+
+\reportfigure{product_detail_checkpoint3.png}
+{Product detail page with specification rendering, compatibility-oriented
+results, add-to-cart control, and direct order creation. This screenshot is
+important because it shows how technical attributes, recommendation-style
+guidance, and transactional actions are combined on a single screen.}
+{fig:product_detail_2}
+
+\section{Cart Application}
+
+\begin{justifying}
+The cart module manages a session-based shopping cart. When the user adds a
+product, the application resolves the current session, retrieves or creates the
+matching cart, and either creates a new cart item or increments the quantity of
+an existing one. This behavior makes the cart intuitive and also gives the test
+suite a clear functional assertion: adding the same product twice should produce
+quantity two rather than duplicate rows.
+\end{justifying}
+
+\reportfigure{cart_checkpoint3.png}
+{Cart page with item names, quantities, and totals. The screen demonstrates the
+session-based workflow clearly and provides visible evidence for the quantity
+accumulation behavior verified in the automated tests.}
+{fig:cart_checkpoint}
+
+\section{Orders Application}
+
+\begin{justifying}
+The orders app is where the project becomes much more workflow-oriented. A user
+can create a draft order directly from a product page. The application stores
+an order record and a corresponding line item. When the order is submitted, the
+service layer timestamps the submission and delegates source selection to the
+fulfillment decision engine. The order detail page then renders line items,
+status, notes, and total value.
+\end{justifying}
+
+\reportfigure{orders_list_checkpoint3.png}
+{Order list page displaying created orders and their statuses. This view helps
+translate backend order-state transitions into an interface that can be
+inspected quickly during evaluation and demonstration.}
+{fig:orders_list_2}
+
+\reportfigure{order_detail_decision_checkpoint3.png}
+{Order detail page after submission. The screen exposes an explainable workflow
+state rather than static product information only, which is central to the
+report's claim that the prototype supports operational decision support instead
+of catalog display alone.}
+{fig:order_detail_2}
+
+\subsection{Decision Logic}
+
+\begin{justifying}
+The decision engine follows a clear priority sequence. It first checks whether
+inventory is sufficient. If so, inventory is chosen because it provides zero
+lead time and no procurement or manufacturing delay. If inventory is not
+sufficient, the system compares supplier offers and manufacturing cost profiles.
+The current implementation sorts available candidates by cost and then by lead
+time, ignores supplier offers whose available quantity is zero, and prevents
+serialized stock from being used unless enough serial units are actually
+available. If neither supplier data nor manufacturing profiles exist, the
+system falls back to a placeholder manufacturing decision. This fallback is
+honest about missing data while keeping the workflow operational.
+\end{justifying}
+
+\begin{algorithm}[H]
+\caption{Simplified order fulfillment decision}
+\begin{algorithmic}[1]
+\ForAll{item in order}
+    \If{available inventory quantity is at least requested quantity}
+        \State choose inventory
+    \Else
+        \State collect supplier candidate if offer constraints are satisfied
+        \State collect manufacturing candidate if cost profile exists
+        \If{no candidates exist}
+            \State choose manufacturing fallback
+        \Else
+            \State sort candidates by cost, then lead time
+            \State choose best candidate
+        \EndIf
+    \EndIf
+\EndFor
+\State combine item-level decisions into an order-level explanation
+\end{algorithmic}
+\label{alg:fulfillment2}
+\end{algorithm}
+
+\section{Inventory Application}
+
+\begin{justifying}
+The inventory module supports both direct product visibility and operational
+dashboarding. When an order is fulfilled from inventory, stock quantities are
+decremented. If a stock item is marked as serialized, available serial units
+can be allocated. The dashboard page further summarizes low-stock products and
+serialized-unit counts, giving the evaluator a way to inspect traceability
+behavior beyond the order-detail page.
+\end{justifying}
+
+\reportfigure{inventory_dashboard_checkpoint3.png}
+{Inventory dashboard showing low-stock items and serialized-unit summaries. The
+dashboard supports the report's traceability discussion by making aggregate
+stock visibility and serialized inventory status inspectable from one page.}
+{fig:inventory_dashboard_2}
+
+\section{Pricing Application}
+
+\begin{justifying}
+Pricing logic in this project is not limited to customer-facing selling price.
+It also includes supplier offers and internal manufacturing cost profiles. This
+is an important design choice because order submission requires a decision not
+just about what was ordered, but also about how the platform should plan to
+fulfill it. Supplier offers store purchase cost, lead time, and quantity
+constraints. Cost profiles represent manufacturing feasibility. Together they
+provide the information needed by the decision engine.
+\end{justifying}
+
+\reportfigure{pricing_dashboard_checkpoint3.png}
+{Pricing dashboard with supplier offers and procurement summaries. It shows that
+the project now models fulfillment economics directly instead of treating price
+as only a customer-facing field on the catalog.}
+{fig:pricing_dashboard_2}
+
+\section{Manufacturing Application}
+
+\begin{justifying}
+The manufacturing app captures a simple but useful model of in-house or
+partner-based production. Manufacturer records and manufacturing orders allow
+the system to document how orders can flow into a production path when
+inventory is insufficient or manufacturing is cheaper or otherwise preferable.
+The dashboard shows open manufacturing orders, helping communicate that the
+system extends beyond retail presentation into planning logic.
+\end{justifying}
+
+\reportfigure{manufacturing_dashboard_checkpoint3.png}
+{Manufacturing dashboard showing open manufacturing orders and their current
+statuses. This complements the order-decision logic by showing how insufficient
+inventory can lead to a visible planning artifact rather than a hidden backend
+state change.}
+{fig:manufacturing_dashboard_2}
+
+\section{Quote and Demo Checkout Flow}
+
+\begin{justifying}
+The project includes a demo-ready quote page that estimates shipping, tax, and
+payment-session details for an order. This page does not claim production
+integration, but it provides a realistic extension point between order totals
+and downstream checkout operations. The design is intentionally honest: the
+page labels whether payment, shipping, and tax backends are configured or still
+operating in stub mode.
+\end{justifying}
+
+\section{Warranty and RMA Workflow}
+
+\begin{justifying}
+The RMA module adds a minimal post-purchase workflow to the system. Users can
+create return or warranty records tied to products, orders, and serial units,
+and the module exposes list and detail pages for inspection. This feature is
+important academically because it demonstrates that the same traceability data
+used for fulfillment can also support downstream service scenarios.
+\end{justifying}
+
+\section{Administrative Workflow and Data Stewardship}
+
+\begin{justifying}
+In addition to the user-facing pages, the project benefits from Django's admin
+site for data stewardship. Categories, products, inventory records, supplier
+offers, manufacturing records, and RMAs can all be inspected or edited through
+the administrative interface. This matters in practice because a hardware
+catalog is only useful if the underlying data can be maintained consistently.
+Even though the admin interface is not the centerpiece of the report, it acts
+as an important operational tool for seeding, correcting, and demonstrating the
+prototype.
+\end{justifying}
+
+\begin{justifying}
+This administrative layer also reinforces the modular design of the system.
+Each app exposes its own models and basic management surface, which means the
+project can be extended incrementally without forcing a single giant management
+screen. For a seminar evaluator, the admin layer provides another form of
+evidence that the codebase is not only a front-end mockup, but a functioning
+database-backed application with maintainable records.
+\end{justifying}
+
+\section{Template and Presentation Improvements}
+
+\begin{justifying}
+Several templates were cleaned and modernized during finalization. This
+included removing broken text artifacts, aligning route names, and improving
+the visual flow between list pages and detail pages. Although visual polish is
+not the main academic contribution, it matters in a seminar report because it
+affects how clearly the system can be understood in screenshots and demos.
+\end{justifying}
+
+\subsection{Placeholder Image Strategy}
+
+\begin{justifying}
+Since no real product-image dataset is currently attached to the system,
+generated placeholder images are used on product cards and detail pages. The
+placeholder service incorporates the product name into the generated image,
+making the catalog appear intentionally designed rather than incomplete. This is
+a pragmatic design decision that improves presentation while keeping the data
+model simple.
+\end{justifying}
+
+\chapter{API Design and Integration Readiness}
+
+\section{API Overview}
+
+\begin{justifying}
+The project exposes its core resources through Django REST Framework routers.
+The API root presents a browsable index of registered endpoints, and each
+resource can be explored directly in the browser. This is valuable for both
+development and presentation because it allows a reviewer to inspect data
+without building a separate API client.
+\end{justifying}
+
+\reportfigure{api_root_checkpoint3.png}
+{Browsable API root produced by Django REST Framework. This page confirms that
+the main resource groups are exposed successfully and makes the resource layout
+inspectable without a separate API client.}
+{fig:api_root_2}
+
+\section{Registered API Resources}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|p{2.4in}|p{2.7in}|}
+\hline
+\textbf{Endpoint Group} & \textbf{Role} \\ \hline
+\texttt{/api/categories/} & Category resource listing and detail. \\ \hline
+\texttt{/api/products/} & Product resource listing and detail. \\ \hline
+\texttt{/api/stock/} & Stock item resource listing and detail. \\ \hline
+\texttt{/api/serial-units/} & Serialized unit inspection. \\ \hline
+\texttt{/api/orders/} & Order resources and order submission actions. \\ \hline
+\texttt{/api/manufacturers/} & Manufacturer resources. \\ \hline
+\texttt{/api/manufacturing-orders/} & Manufacturing planning records. \\ \hline
+\texttt{/api/suppliers/} & Supplier resources. \\ \hline
+\texttt{/api/supplier-offers/} & Supplier pricing and availability offers. \\ \hline
+\texttt{/api/cost-profiles/} & Manufacturing cost and lead-time profiles. \\ \hline
+\texttt{/api/procurement-orders/} & Procurement planning records. \\ \hline
+\texttt{/api/rmas/} & Warranty and return request resources. \\ \hline
+\texttt{/api/auth/me/} & Authenticated user inspection endpoint. \\ \hline
+\end{tabular}
+\caption{Resource groups exposed through the REST API.}
+\label{tab:api_resources}
+\end{table}
+
+\section{API Documentation Page}
+
+\begin{justifying}
+In addition to the raw DRF API root, the project includes a custom API docs
+page. This page acts as a human-friendly summary of routes and authentication
+status. It is especially useful for classroom demonstration because it explains
+what the endpoints represent and how they can be tested, even if the viewer is
+not already familiar with the DRF browsable interface.
+\end{justifying}
+
+\reportfigure{api_docs_checkpoint3.png}
+{Custom API docs page that summarizes major routes and current authentication
+behavior. It provides a simpler classroom-facing overview than the raw DRF
+interface and helps connect API endpoints to the report's implementation
+narrative.}
+{fig:api_docs_2}
+
+\section{Current Authentication State}
+
+\begin{justifying}
+The API uses \texttt{AllowAny} permissions by default for most resources, which
+means that the main entities remain publicly accessible in development. At the
+same time, the project now includes working DRF token and JWT authentication
+classes in the global REST framework configuration, and the
+\texttt{/api/auth/me/} route is protected with \texttt{IsAuthenticated}. This
+design makes the API easy to inspect in a local academic setting while still
+demonstrating a concrete authenticated flow that can be expanded in future
+work.
+\end{justifying}
+
+\begin{lstlisting}[caption={Representative API-auth related routes},label={lst:apiroutes}]
+/api/auth/token/
+/api/auth/token/refresh/
+/api/auth/token-auth/
+/api/auth/me/
+/api/
+/api/docs/
+\end{lstlisting}
+
+\section{API Testing Examples}
+
+\begin{justifying}
+The API can be verified in a browser, through the DRF browsable interface, or
+via command-line tools such as \texttt{curl}. The following examples illustrate
+how a reviewer can test list endpoints during a demo. Open resource endpoints
+can be inspected anonymously, while the authenticated user route can be tested
+after obtaining a DRF token or JWT.
+\end{justifying}
+
+\begin{lstlisting}[caption={Example API validation commands},label={lst:apicurl}]
+curl http://127.0.0.1:8000/api/products/
+curl http://127.0.0.1:8000/api/orders/
+curl http://127.0.0.1:8000/api/stock/
+curl -H "Authorization: Token <token>" http://127.0.0.1:8000/api/auth/me/
+\end{lstlisting}
+
+\section{Integration Readiness}
+
+\begin{justifying}
+Although external service integrations are not fully implemented yet, the
+project structure is now more ready for them. Order workflows, pricing data, and
+API exposure provide clear insertion points for future payment, shipping, tax,
+and RMA integrations. The current quote page already demonstrates how these
+concerns can be surfaced honestly through a mixture of configuration checks and
+stubbed fallback behavior, which is appropriate for a final seminar prototype.
+\end{justifying}
+
+\chapter{Data Analysis, Testing, and Evaluation}
+
+\section{Structural Verification}
+
+\begin{justifying}
+The first validation layer focuses on structural correctness. The project was
+checked with \texttt{python manage.py check}, which verifies framework-level
+configuration, model definitions, and installed application health. Migration
+consistency was checked with a dry-run migration validation command, and schema
+application was verified with \texttt{python manage.py migrate --noinput}.
+These commands are not substitutes
+for functional testing, but they are essential because they catch problems that
+would otherwise prevent the project from starting correctly.
+\end{justifying}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|p{2.8in}|p{0.8in}|p{2.2in}|}
+\hline
+\textbf{Command} & \textbf{Result} & \textbf{Interpretation} \\ \hline
+\texttt{python manage.py check} & Pass & No immediate Django configuration or import errors. \\ \hline
+\texttt{python manage.py makemigrations --check --dry-run} & Pass & Models align with migration history. \\ \hline
+\texttt{python manage.py migrate --noinput} & Pass & Database schema applies cleanly. \\ \hline
+\texttt{python manage.py test} & Pass & Automated tests succeed. \\ \hline
+\end{tabular}
+\caption{Summary of structural validation commands.}
+\label{tab:validation_commands}
+\end{table}
+
+\section{Route Verification}
+
+\begin{justifying}
+The second validation layer focuses on route availability. This matters because
+the final implementation introduced multiple new modules and pages. A project
+can have correct models but still fail at the routing layer if app URLs are not
+included, namespaced routes are incorrect, or templates reference stale route
+names. Route verification confirmed that the home page, catalog, search, cart,
+orders, quote flow, inventory dashboard, pricing dashboard, manufacturing
+dashboard, RMA pages, API root, and API docs page all returned successful
+responses in the development environment.
+\end{justifying}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|p{2.8in}|p{0.8in}|p{2.2in}|}
+\hline
+\textbf{Route} & \textbf{HTTP Status} & \textbf{Notes} \\ \hline
+\texttt{/} & 200 & Home page loads. \\ \hline
+\texttt{/catalog/} & 200 & Catalog landing works. \\ \hline
+\texttt{/catalog/products/} & 200 & Product list works. \\ \hline
+\texttt{/catalog/search/?q=M12} & 200 & Search route works. \\ \hline
+\texttt{/cart/} & 200 & Cart page works. \\ \hline
+\texttt{/orders/} & 200 & Order list works. \\ \hline
+\texttt{/orders/\{id\}/quote/} & 200 & Quote page works. \\ \hline
+\texttt{/inventory/dashboard/} & 200 & Inventory dashboard works. \\ \hline
+\texttt{/pricing/dashboard/} & 200 & Pricing dashboard works. \\ \hline
+\texttt{/manufacturing/dashboard/} & 200 & Manufacturing dashboard works. \\ \hline
+\texttt{/rma/} & 200 & RMA list works. \\ \hline
+\texttt{/api/} & 200 & API root works. \\ \hline
+\texttt{/api/docs/} & 200 & API docs page works. \\ \hline
+\end{tabular}
+\caption{Representative route verification results.}
+\label{tab:routechecks}
+\end{table}
+
+\section{Automated Functional Tests}
+
+\begin{justifying}
+Automated functional tests now provide one of the strongest pieces of evidence
+in the project. The suite remains concise, but it covers a useful cross-section
+of user-facing and backend behavior. Catalog tests verify search and
+compatibility retrieval. Cart tests verify quantity accumulation. Order tests
+verify totals, draft-order creation, quote-page rendering, inventory-backed
+fulfillment, supplier and manufacturing paths, serialized-stock edge cases, and
+authenticated API access. RMA tests verify that return records can be created
+successfully. Together, these tests create evidence that the system not only
+renders pages but also performs key workflow operations correctly.
+\end{justifying}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|p{1.9in}|p{3.9in}|}
+\hline
+\textbf{Test Module} & \textbf{Covered Behavior} \\ \hline
+\texttt{catalog.tests} & Search by specification values and compatibility-oriented detail context. \\ \hline
+\texttt{cart.tests} & Add-to-cart behavior and quantity increment logic. \\ \hline
+\texttt{orders.tests} & Order totals, draft-order creation, quote rendering, inventory, supplier, manufacturing, serialized-stock, and auth-flow checks. \\ \hline
+\texttt{rma.tests} & Basic warranty and return request creation. \\ \hline
+\end{tabular}
+\caption{Automated test modules included in the final project verification suite.}
+\label{tab:testmodules}
+\end{table}
+
+\reportfigure{tests_terminal_checkpoint3.png}
+{Terminal screenshot showing the automated test suite executing successfully.
+The current project passes thirteen tests, which gives the report a concrete
+and reproducible verification result rather than a purely narrative claim.}
+{fig:tests_terminal_2}
+
+\subsection{Discussion of Test Coverage}
+
+\begin{justifying}
+The current tests are intentionally targeted rather than exhaustive. They focus
+on behaviors that are pedagogically important and that correspond directly to
+visible system features. The existence of tests does not mean the platform is
+fully verified. Broader API write permissions, procurement record creation,
+manufacturing order generation, serialized-unit allocation details, and more
+adversarial input validation still require additional coverage. Even so, the
+current suite marks an important transition away from purely manual debugging.
+\end{justifying}
+
+\section{Observed Evaluation Results}
+
+\begin{justifying}
+The most concrete evaluation result in the current project is that the
+verification pipeline succeeds end to end: structural checks pass, route checks
+return successful responses, and the automated suite passes thirteen tests.
+This matters because the different layers validate different risks. Passing
+\texttt{manage.py check} suggests the application is configured coherently.
+Passing migrations suggests the model layer and schema history remain aligned.
+Passing functional tests suggests that important workflow scenarios behave
+correctly under controlled conditions.
+\end{justifying}
+
+\begin{justifying}
+The observed results are especially useful in the order and authentication
+subsystems. Earlier manual inspection alone would not have been enough to catch
+edge cases involving serialized inventory availability, supplier offers with
+zero available quantity, or missing authentication classes for protected API
+routes. The current tests provide evidence that these issues were identified and
+resolved. As a result, the final report can present the project not merely as a
+feature list, but as a system whose behavior has been actively checked against
+failure-prone scenarios.
+\end{justifying}
+
+\section{Evaluation Metrics for the Final Report}
+
+\begin{justifying}
+Although the project emphasizes implementation and validation rather than a
+full-scale experimental study, the current system supports a clearer evaluation
+plan than the earlier submission. Several metrics are especially appropriate:
+\end{justifying}
+
+\begin{equation}
+\text{Precision@k} = \frac{\text{Number of relevant results in top }k}{k}
+\end{equation}
+
+\begin{equation}
+\text{Compatibility Accuracy} = \frac{\text{Correct compatibility suggestions}}{\text{Total compatibility suggestions}}
+\end{equation}
+
+\begin{equation}
+\text{Fulfillment Decision Accuracy} = \frac{\text{Correct source selections}}{\text{Total evaluated orders}}
+\end{equation}
+
+\begin{equation}
+\text{Inventory Accuracy} = 1 - \frac{|\text{Expected stock} - \text{Observed stock}|}{\max(1,\text{Observed stock})}
+\end{equation}
+
+\begin{justifying}
+These measures can later be complemented by response-time metrics for search,
+average order-processing latency, and user-evaluation feedback on the clarity of
+compatibility suggestions and dashboard outputs. The present implementation lays
+the groundwork for such a study by making the relevant behaviors observable and
+testable.
+\end{justifying}
+
+\section{Testing as Academic Evidence}
+
+\begin{justifying}
+For seminar reporting, tests are valuable not only because they find defects but
+also because they communicate engineering maturity. A report with only
+screenshots may look polished but still conceal fragile behavior. A report with
+tests, route checks, and migration verification provides stronger evidence that
+the system has been reasoned about as software, not just as a presentation.
+This is one of the strongest areas in which the final project improves on the
+earlier submission.
+\end{justifying}
+
+\chapter{Discussion}
+
+\section{Interpretation of Results}
+
+\begin{justifying}
+The strongest result of the project is that the individual modules now operate
+as a connected workflow rather than as isolated demonstrations. A user can
+search, inspect compatibility-oriented product detail pages, add items to a
+session-based cart, create draft orders, submit those orders, and observe
+system decisions about inventory, supplier, or manufacturing sources.
+Management-facing dashboards, quote estimates, a browsable API, and the RMA
+module further extend that workflow into operational and post-purchase
+inspection paths. From a seminar perspective, this is more persuasive than a
+catalog-only demonstration because it shows interaction among data modeling,
+decision logic, and interface behavior.
+\end{justifying}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|p{1.6in}|p{2.15in}|p{2.35in}|}
+\hline
+\textbf{Area} & \textbf{Earlier Submission} & \textbf{Final Project} \\ \hline
+Catalog & Product list and detail with JSON specs & Product list, search, compatibility-oriented detail, and placeholder images \\ \hline
+Inventory & Quantity and serial foundation & Inventory dashboard plus stock-aware order fulfillment \\ \hline
+Cart & Not implemented & Session-based cart with quantity accumulation \\ \hline
+Orders & Minimal or absent & Draft orders, order items, totals, notes, timestamps, submit flow, and quote page \\ \hline
+Pricing & Planned only & Supplier offers, cost profiles, procurement records, and dashboard \\ \hline
+Manufacturing & Planned only & Manufacturers, manufacturing orders, and dashboard \\ \hline
+Returns & Not available & Basic RMA workflow and API exposure \\ \hline
+Fulfillment & Planned concept & Rule-based source selection across inventory, supplier, and manufacturing \\ \hline
+API & Limited or absent & DRF resource endpoints, auth token endpoints, auth/me route, and custom docs page \\ \hline
+Validation & Manual checks only & Structural checks, route verification, and 13 automated tests \\ \hline
+\end{tabular}
+\caption{High-level comparison between the earlier seminar submission and the
+final project. The table highlights that the main improvement is not cosmetic
+change, but the addition of workflow depth, API surface area, and verifiable
+behavior.}
+\label{tab:comparison}
+\end{table}
+
+\section{Design Tradeoffs}
+
+\begin{justifying}
+Several design tradeoffs are visible throughout the implementation. JSON-based
+specifications make the catalog flexible, but they move some validation burden
+into application logic. Open-by-default API permissions make the prototype easy
+to inspect, but they are not sufficient for production deployment. The
+fulfillment engine is explainable and testable because it is rule-based, but it
+is also heuristic and intentionally limited compared with full decision-support
+software. These tradeoffs are acceptable in a seminar prototype because they
+prioritize clarity, modularity, and demonstrability.
+\end{justifying}
+
+\section{Lessons Learned}
+
+\begin{itemize}[leftmargin=0.4in]
+    \item A modular Django architecture was sufficient to support catalog, operational, and API concerns without a large framework rewrite.
+    \item Dynamic specifications were useful for hardware diversity, but they work best when paired with clear presentation logic and focused test coverage.
+    \item Rule-based fulfillment created a strong middle ground between realism and explainability for an academic prototype.
+    \item Automated tests had outsized value because they exposed errors that were not obvious from manual page inspection alone.
+    \item Demo-ready payment, shipping, tax, and RMA flows made the system easier to discuss honestly as a prototype with visible extension points.
+\end{itemize}
+
+\section{Academic Contribution of the Prototype}
+
+\begin{justifying}
+The academic contribution of this work is not that it solves hardware commerce
+in a fully general sense. Rather, it demonstrates a coherent reference design
+for a technically oriented commerce platform in which flexible product data,
+compatibility hints, inventory traceability, order-source decisions, and
+service follow-up records can all coexist within one modular web application.
+That reference design is useful because seminar projects are often evaluated on
+whether they connect architecture, implementation, and evidence into a single
+argument. The present system does that more effectively than a catalog-only
+prototype would.
+\end{justifying}
+
+\begin{justifying}
+The project also illustrates a practical lesson about scope management. A final
+submission does not need every production concern to be solved in order to be
+academically valuable. Instead, it benefits from making tradeoffs explicit,
+implementing the most instructive workflows end to end, and verifying them
+carefully. In this report, that means emphasizing explainable fulfillment,
+dynamic specifications, operational dashboards, and targeted testing rather
+than overclaiming industrial completeness.
+\end{justifying}
+
+\chapter{Limitations and Threats to Validity}
+
+\section{Current Limitations}
+
+\begin{justifying}
+Despite the progress in the final project, the system remains a prototype. The
+API is mostly open in development and should not be considered
+production-ready from a security perspective. Compatibility reasoning remains
+heuristic and depends on a small set of selected specification keys. The
+placeholder image strategy is appropriate for demos but is not a substitute for
+real catalog media. The cart is session-based and does not yet support
+authenticated customer accounts or cross-device persistence. Payment, shipping,
+tax, and RMA flows are intentionally partial and should be interpreted as
+demonstration workflows rather than deployed services.
+\end{justifying}
+
+\section{Dataset and Evaluation Limits}
+
+\begin{justifying}
+The automated tests use internally created data rather than a large benchmark
+catalog. This is appropriate for unit and functional tests, but it limits the
+ability to claim broad empirical performance for search quality or compatibility
+recommendation quality. A final report should therefore distinguish carefully
+between correctness on controlled test cases and general performance on
+real-world hardware datasets.
+\end{justifying}
+
+\section{Environmental Limits}
+
+\begin{justifying}
+The development environment uses SQLite and a local filesystem. This is a
+reasonable choice for prototype development, but it can differ from production
+behavior in concurrency, deployment structure, and media handling. The final
+report therefore avoids presenting the current environment as a direct
+production benchmark and treats it instead as a controlled academic
+implementation context.
+\end{justifying}
+
+\section{Threats to Validity}
+
+\begin{itemize}[leftmargin=0.4in]
+    \item \textbf{Internal validity:} heuristic compatibility rules may overstate correctness if only small curated examples are shown.
+    \item \textbf{External validity:} test cases based on small synthetic data may not generalize to larger industrial catalogs.
+    \item \textbf{Construct validity:} visible workflow success does not guarantee a complete enterprise-commerce solution.
+    \item \textbf{Presentation bias:} screenshots may emphasize polished paths while hiding under-tested edge cases.
+\end{itemize}
+
+\chapter{Future Work}
+
+\section{Security Hardening}
+
+\begin{justifying}
+The highest-priority future improvement is API security. The project already
+contains JWT and token-auth related routes, which means the next step is not to
+invent a new auth strategy but to enforce appropriate permission classes on
+resource endpoints. This will make the API more realistic and closer to a
+production-capable service.
+\end{justifying}
+
+\section{Compatibility Reasoning Expansion}
+
+\begin{justifying}
+The current compatibility approach demonstrates feasibility, but the final
+system should include richer logic. This could involve explicit compatibility
+tables, category-specific rules, engineering constraints, or knowledge-graph
+style relations. A stronger compatibility engine would also support a more
+rigorous evaluation methodology in the final report.
+\end{justifying}
+
+\section{Search and Filtering}
+
+\begin{justifying}
+Search is currently based on text matching across key fields and serialized
+specification content. A future version could introduce structured filters,
+weighted ranking, synonym handling, or even a specialized search backend.
+Because hardware discovery often depends on precise attribute combinations,
+improvements in this area would substantially strengthen the practical value of
+the project.
+\end{justifying}
+
+\section{Operational Integrations}
+
+\begin{justifying}
+Future operational integrations include payment processing, shipping,
+tax-calculation services, and return management. From a system-design
+perspective, the current modular structure is well positioned for these
+extensions. Order workflows, dashboards, and API endpoints already provide the
+organizational backbone required for such integrations.
+\end{justifying}
+
+\section{Expanded Testing}
+
+\begin{justifying}
+The existing thirteen tests should be treated as a strong starting point rather
+than a complete verification story. Additional tests should cover API creation
+and update operations, permission enforcement across more endpoints, supplier
+and manufacturing record creation, serialization allocation details, invalid
+order inputs, and more detailed dashboard assertions. Expanding test coverage
+would not only improve robustness but also strengthen the academic quality of
+the project by providing clearer evidence of engineering discipline.
+\end{justifying}
+
+\section{Formal Evaluation Study}
+
+\begin{justifying}
+The final report should include a broader evaluation chapter based on search
+effectiveness, compatibility correctness, fulfillment decision correctness, and
+system usability. If time permits, a small user study involving classmates or
+reviewers could provide useful qualitative evidence regarding interface clarity
+and perceived usefulness of compatibility suggestions and operational
+dashboards.
+\end{justifying}
+
+\chapter{Conclusion}
+
+\begin{justifying}
+The final project marks a major step forward for the Intelligent
+Hardware-Focused E-Commerce Platform. The system has evolved from a largely
+structural prototype into a workflow-aware implementation that now includes
+catalog search, compatibility-oriented product detail pages, a session-based
+cart, order creation and submission, inventory-aware fulfillment logic,
+supplier and manufacturing planning modules, dashboard views, a browsable API,
+a demo-ready quote flow, a basic RMA module, and automated tests.
+\end{justifying}
+
+\begin{justifying}
+Equally important, the system is now easier to communicate as an academic
+project. The new modules provide visible evidence of progression from the
+earlier submission, and the tests provide technical evidence that key behaviors
+work as intended. Although the platform still requires security hardening,
+richer evaluation, and broader integrations before it can be considered
+complete, the present implementation provides a credible, well-scoped final
+seminar project with clear future directions.
+\end{justifying}
+
+\appendix
+
+\chapter{Commands Used for Validation}
+
+\begin{lstlisting}[caption={Framework and validation commands},label={lst:commands}]
+python manage.py check
+python manage.py makemigrations --check --dry-run
+python manage.py migrate --noinput
+python manage.py test
+python manage.py runserver
+\end{lstlisting}
+
+\begin{thebibliography}{99}
+
+\bibitem{django-docs}
+Django Software Foundation,
+\emph{Django Documentation}.
+[Online]. Available: \url{https://docs.djangoproject.com/}
+[Accessed: Apr. 2026].
+
+\bibitem{drf-docs}
+Encode OSS Ltd.,
+\emph{Django REST Framework Documentation}.
+[Online]. Available: \url{https://www.django-rest-framework.org/}
+[Accessed: Apr. 2026].
+
+\bibitem{simplejwt-docs}
+Jazzband,
+\emph{Django REST Framework Simple JWT Documentation}.
+[Online]. Available: \url{https://django-rest-framework-simplejwt.readthedocs.io/}
+[Accessed: Apr. 2026].
+
+\bibitem{sqlite-docs}
+SQLite Consortium,
+\emph{SQLite Documentation}.
+[Online]. Available: \url{https://www.sqlite.org/docs.html}
+[Accessed: Apr. 2026].
+
+\bibitem{scholz-config}
+M. Scholz, V. Dorner, G. Schryen, and A. Benlian,
+``A configuration-based recommender system for supporting e-commerce
+decisions,''
+\emph{European Journal of Operational Research},
+vol. 259, no. 1, pp. 205--215, 2017.
+
+\bibitem{zhang-ai-rec}
+Q. Zhang, J. Lu, and Y. Jin,
+``Artificial intelligence in recommender systems,''
+\emph{Complex \& Intelligent Systems},
+vol. 7, pp. 439--457, 2021.
+
+\bibitem{traceability-review}
+R. Schuitemaker and X. Xu,
+``Product traceability in manufacturing: A technical review,''
+\emph{Procedia CIRP},
+vol. 93, pp. 700--705, 2020.
+
+\bibitem{placeholdco}
+Placehold,
+\emph{placehold.co Placeholder Image Service}.
+[Online]. Available: \url{https://placehold.co/}
+[Accessed: Apr. 2026].
+
+\end{thebibliography}
+
+\end{document}

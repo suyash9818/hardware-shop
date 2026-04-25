@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Your Cart{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+  <div>
+    <h1 class="mb-1">Your Cart</h1>
+    <p class="text-muted mb-0">Review the items you have selected.</p>
+  </div>
+  <a href="{% url 'product_list' %}" class="btn btn-outline-light">Continue Shopping</a>
+</div>
+
+<div class="card card-soft">
+  <div class="card-body">
+    {% for item in items %}
+      <div class="d-flex justify-content-between align-items-center py-3 {% if not forloop.last %}border-bottom{% endif %}">
+        <div>
+          <div class="fw-semibold">{{ item.product.name }}</div>
+          <div class="small text-muted">{{ item.product.sku }}</div>
+        </div>
+        <div class="text-end">
+          <div>{{ item.quantity }} x ${{ item.product.price }}</div>
+          <div class="small text-muted">Line total: ${{ item.line_total }}</div>
+        </div>
+      </div>
+    {% empty %}
+      <div class="text-muted">Your cart is empty.</div>
+    {% endfor %}
+
+    <hr>
+    <div class="d-flex justify-content-between align-items-center">
+      <strong>Total</strong>
+      <strong>${{ total }}</strong>
+    </div>
+  </div>
+</div>
+{% endblock %}

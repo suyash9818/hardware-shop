@@ -1,0 +1,193 @@
+[
+  {
+    "model": "catalog.category",
+    "pk": 1,
+    "fields": {
+      "name": "Sensors",
+      "slug": "sensors"
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 2,
+    "fields": {
+      "name": "Connectors",
+      "slug": "connectors"
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 3,
+    "fields": {
+      "name": "Power",
+      "slug": "power"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 1,
+    "fields": {
+      "sku": "SNS-001",
+      "name": "Proximity Sensor 24V",
+      "category": 1,
+      "description": "Industrial proximity sensor with M12 thread and 24V operation.",
+      "price_usd": "14.50",
+      "specs": {
+        "thread": "M12",
+        "voltage": "24V",
+        "range_mm": "8"
+      },
+      "created_at": "2026-04-22T00:00:00Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 2,
+    "fields": {
+      "sku": "CON-001",
+      "name": "M12 Connector Cable",
+      "category": 2,
+      "description": "Connector cable for M12 sensor assemblies.",
+      "price_usd": "8.99",
+      "specs": {
+        "thread": "M12",
+        "voltage": "24V",
+        "length_m": "2"
+      },
+      "created_at": "2026-04-22T00:00:00Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 3,
+    "fields": {
+      "sku": "PWR-001",
+      "name": "24V Power Relay",
+      "category": 3,
+      "description": "Relay component used to demonstrate procurement and manufacturing decisions.",
+      "price_usd": "19.75",
+      "specs": {
+        "voltage": "24V",
+        "mount": "DIN"
+      },
+      "created_at": "2026-04-22T00:00:00Z"
+    }
+  },
+  {
+    "model": "catalog.compatibility",
+    "pk": 1,
+    "fields": {
+      "product": 1,
+      "compatible_product": 2
+    }
+  },
+  {
+    "model": "inventory.stockitem",
+    "pk": 1,
+    "fields": {
+      "product": 1,
+      "warehouse": "Main Warehouse",
+      "quantity": 12,
+      "is_serialized": true,
+      "updated_at": "2026-04-22T00:00:00Z"
+    }
+  },
+  {
+    "model": "inventory.stockitem",
+    "pk": 2,
+    "fields": {
+      "product": 2,
+      "warehouse": "Main Warehouse",
+      "quantity": 30,
+      "is_serialized": false,
+      "updated_at": "2026-04-22T00:00:00Z"
+    }
+  },
+  {
+    "model": "inventory.stockitem",
+    "pk": 3,
+    "fields": {
+      "product": 3,
+      "warehouse": "Main Warehouse",
+      "quantity": 0,
+      "is_serialized": false,
+      "updated_at": "2026-04-22T00:00:00Z"
+    }
+  },
+  {
+    "model": "inventory.serialunit",
+    "pk": 1,
+    "fields": {
+      "stock_item": 1,
+      "serial_number": "SNS001-A",
+      "status": "AVAILABLE",
+      "created_at": "2026-04-22T00:00:00Z"
+    }
+  },
+  {
+    "model": "inventory.serialunit",
+    "pk": 2,
+    "fields": {
+      "stock_item": 1,
+      "serial_number": "SNS001-B",
+      "status": "AVAILABLE",
+      "created_at": "2026-04-22T00:00:00Z"
+    }
+  },
+  {
+    "model": "pricing.supplier",
+    "pk": 1,
+    "fields": {
+      "name": "Acme Industrial Supply",
+      "website": "https://example.com",
+      "contact_email": "sales@example.com"
+    }
+  },
+  {
+    "model": "pricing.supplieroffer",
+    "pk": 1,
+    "fields": {
+      "product": 3,
+      "supplier": 1,
+      "purchase_cost_usd": "9.25",
+      "lead_time_days": 4,
+      "min_order_qty": 1,
+      "available_qty": 25,
+      "updated_at": "2026-04-22T00:00:00Z"
+    }
+  },
+  {
+    "model": "pricing.costavailabilityprofile",
+    "pk": 1,
+    "fields": {
+      "product": 2,
+      "manufacturing_cost_usd": "4.25",
+      "manufacturing_lead_time_days": 6,
+      "reorder_point": 5,
+      "reorder_qty": 20,
+      "updated_at": "2026-04-22T00:00:00Z"
+    }
+  },
+  {
+    "model": "pricing.costavailabilityprofile",
+    "pk": 2,
+    "fields": {
+      "product": 3,
+      "manufacturing_cost_usd": "11.10",
+      "manufacturing_lead_time_days": 7,
+      "reorder_point": 2,
+      "reorder_qty": 10,
+      "updated_at": "2026-04-22T00:00:00Z"
+    }
+  },
+  {
+    "model": "manufacturing.manufacturer",
+    "pk": 1,
+    "fields": {
+      "name": "Default Manufacturer",
+      "location": "Fullerton, CA",
+      "capabilities": "Light assembly, relay packaging, and contract manufacturing.",
+      "contact_email": "factory@example.com"
+    }
+  }
+]

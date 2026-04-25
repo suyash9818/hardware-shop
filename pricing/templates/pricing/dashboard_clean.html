@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}Pricing Dashboard - Hardware Shop{% endblock %}
+{% block content %}
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <h2 class="mb-0">Pricing & Availability Dashboard</h2>
+    <a href="/admin/pricing/supplieroffer/" class="btn btn-outline-secondary btn-sm">Manage Offers</a>
+  </div>
+
+  <div class="row g-3 mb-3">
+    <div class="col-lg-6">
+      <div class="card card-soft">
+        <div class="card-body">
+          <h5 class="mb-3">Cheapest Supplier Offer (per product)</h5>
+          <div class="table-responsive">
+            <table class="table table-sm table-hover align-middle table-striped table-hover">
+              <thead>
+                <tr>
+                  <th>SKU</th><th>Supplier</th><th class="text-end">$/unit</th><th class="text-end">Lead (days)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for pid, offer in cheapest.items %}
+                  <tr>
+                    <td class="text-muted">{{ offer.product.sku }}</td>
+                    <td>{{ offer.supplier.name }}</td>
+                    <td class="text-end fw-semibold">${{ offer.purchase_cost_usd }}</td>
+                    <td class="text-end text-muted">{{ offer.lead_time_days }}</td>
+                  </tr>
+                {% empty %}
+                  <tr><td colspan="4" class="text-muted">No offers yet.</td></tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="card card-soft">
+        <div class="card-body">
+          <h5 class="mb-3">Procurement Orders (latest)</h5>
+          <div class="table-responsive">
+            <table class="table table-sm table-hover align-middle">
+              <thead>
+                <tr><th>ID</th><th>Product</th><th class="text-end">Qty</th><th>Status</th><th>ETA</th></tr>
+              </thead>
+              <tbody>
+                {% for po in procurements %}
+                  <tr>
+                    <td class="text-muted">PO-{{ po.id }}</td>
+                    <td>{{ po.product.sku }} - {{ po.supplier.name }}</td>
+                    <td class="text-end fw-semibold">{{ po.quantity }}</td>
+                    <td><span class="badge text-bg-info">{{ po.status }}</span></td>
+                    <td class="text-muted">{{ po.expected_delivery|default:"-" }}</td>
+                  </tr>
+                {% empty %}
+                  <tr><td colspan="5" class="text-muted">No procurement orders.</td></tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-soft">
+    <div class="card-body">
+      <h5 class="mb-3">All Supplier Offers (sample)</h5>
+      <div class="table-responsive">
+        <table class="table table-sm table-hover align-middle">
+          <thead>
+            <tr>
+              <th>SKU</th><th>Supplier</th><th class="text-end">$/unit</th><th class="text-end">Min Qty</th><th class="text-end">Avail</th><th class="text-end">Lead (days)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for o in offers %}
+              <tr>
+                <td class="text-muted">{{ o.product.sku }}</td>
+                <td>{{ o.supplier.name }}</td>
+                <td class="text-end fw-semibold">${{ o.purchase_cost_usd }}</td>
+                <td class="text-end text-muted">{{ o.min_order_qty }}</td>
+                <td class="text-end text-muted">{{ o.available_qty|default:"-" }}</td>
+                <td class="text-end text-muted">{{ o.lead_time_days }}</td>
+              </tr>
+            {% empty %}
+              <tr><td colspan="6" class="text-muted">No offers found.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}

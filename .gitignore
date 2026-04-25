@@ -1,0 +1,16 @@
+﻿.venv/
+.tmp/
+__pycache__/
+*.pyc
+db.sqlite3
+*.sqlite3-journal
+.env
+.DS_Store
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.pdf
+*.synctex.gz
+*.toc

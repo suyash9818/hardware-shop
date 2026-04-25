@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Order Quote #{{ order.id }}{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+  <div>
+    <h1 class="mb-1">Checkout Quote</h1>
+    <p class="text-muted mb-0">Demo estimate for payment, shipping, and tax integrations.</p>
+  </div>
+  <a href="{% url 'orders:order_detail' order.id %}" class="btn btn-outline-light">Back to Order</a>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-7">
+    <div class="card card-soft h-100">
+      <div class="card-body">
+        <h5 class="mb-3">Order #{{ order.id }}</h5>
+        <div class="table-responsive">
+          <table class="table table-sm align-middle">
+            <thead><tr><th>Product</th><th class="text-end">Qty</th><th class="text-end">Line</th></tr></thead>
+            <tbody>
+            {% for item in order.items.all %}
+              <tr>
+                <td>{{ item.product.name }} <div class="small text-muted">{{ item.product.sku }}</div></td>
+                <td class="text-end">{{ item.quantity }}</td>
+                <td class="text-end">${{ item.line_total }}</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <form class="row g-2 mt-3" method="get">
+          <div class="col-md-6"><input class="form-control" type="text" name="zip" value="{{ zip_code }}" placeholder="ZIP code"></div>
+          <div class="col-md-3"><input class="form-control" type="text" name="state" value="{{ state }}" placeholder="State"></div>
+          <div class="col-md-3"><button class="btn btn-primary w-100" type="submit">Recalculate</button></div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-5">
+    <div class="card card-soft mb-4">
+      <div class="card-body">
+        <h5 class="mb-3">Cost Summary</h5>
+        <div class="d-flex justify-content-between mb-2"><span>Subtotal</span><strong>${{ subtotal }}</strong></div>
+        <div class="d-flex justify-content-between mb-2"><span>Shipping{% if selected_rate %} ({{ selected_rate.carrier }} {{ selected_rate.service }}){% endif %}</span><strong>${{ shipping_amount }}</strong></div>
+        <div class="d-flex justify-content-between mb-2"><span>Estimated tax</span><strong>${{ tax_amount }}</strong></div>
+        <hr>
+        <div class="d-flex justify-content-between fs-5"><span>Total</span><strong>${{ grand_total }}</strong></div>
+      </div>
+    </div>
+
+    <div class="card card-soft">
+      <div class="card-body">
+        <h5 class="mb-3">Integration Status</h5>
+        <ul class="mb-3">
+          <li>Payments: {% if payment_configured %}configured{% else %}demo stub{% endif %}</li>
+          <li>Shipping: {% if shipping_configured %}configured{% else %}demo rates{% endif %}</li>
+          <li>Tax: {% if tax_configured %}configured{% else %}demo estimate{% endif %}</li>
+        </ul>
+        <div class="small text-muted mb-3">Checkout session ID: {{ payment_session.id }}</div>
+        <a class="btn btn-success w-100" href="{{ payment_session.url }}">Proceed to Demo Checkout</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

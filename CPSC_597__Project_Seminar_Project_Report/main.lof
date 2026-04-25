@@ -1,0 +1,27 @@
+\babel@toc {english}{}\relax 
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces High-level architecture of the final Django prototype, showing the relationship among catalog, cart, inventory, orders, pricing, manufacturing, RMA, user-facing pages, and API endpoints. The diagram emphasizes that the project is not a single monolith but a set of cooperating apps connected through shared models and order-driven workflow transitions.}}{11}{figure.caption.50}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {6.1}{\ignorespaces Current home page used as the landing point for the project. The page now acts as a hub into multiple operational modules rather than only a simple catalog summary, which makes the system easier to demonstrate in a seminar setting.}}{19}{figure.caption.80}%
+\contentsline {figure}{\numberline {6.2}{\ignorespaces Catalog listing with search and placeholder product images. The card presentation is more complete than the earlier version and provides stronger visual evidence for how dynamic specifications can still support a coherent frontend experience.}}{20}{figure.caption.81}%
+\contentsline {figure}{\numberline {6.3}{\ignorespaces Product detail page with specification rendering, compatibility-oriented results, add-to-cart control, and direct order creation. This screenshot is important because it shows how technical attributes, recommendation-style guidance, and transactional actions are combined on a single screen.}}{21}{figure.caption.84}%
+\contentsline {figure}{\numberline {6.4}{\ignorespaces Cart page with item names, quantities, and totals. The screen demonstrates the session-based workflow clearly and provides visible evidence for the quantity accumulation behavior verified in the automated tests.}}{22}{figure.caption.86}%
+\contentsline {figure}{\numberline {6.5}{\ignorespaces Order list page displaying created orders and their statuses. This view helps translate backend order-state transitions into an interface that can be inspected quickly during evaluation and demonstration.}}{22}{figure.caption.88}%
+\contentsline {figure}{\numberline {6.6}{\ignorespaces Order detail page after submission. The screen exposes an explainable workflow state rather than static product information only, which is central to the report's claim that the prototype supports operational decision support instead of catalog display alone.}}{23}{figure.caption.89}%
+\contentsline {figure}{\numberline {6.7}{\ignorespaces Inventory dashboard showing low-stock items and serialized-unit summaries. The dashboard supports the report's traceability discussion by making aggregate stock visibility and serialized inventory status inspectable from one page.}}{25}{figure.caption.93}%
+\contentsline {figure}{\numberline {6.8}{\ignorespaces Pricing dashboard with supplier offers and procurement summaries. It shows that the project now models fulfillment economics directly instead of treating price as only a customer-facing field on the catalog.}}{26}{figure.caption.95}%
+\contentsline {figure}{\numberline {6.9}{\ignorespaces Manufacturing dashboard showing open manufacturing orders and their current statuses. This complements the order-decision logic by showing how insufficient inventory can lead to a visible planning artifact rather than a hidden backend state change.}}{26}{figure.caption.97}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {7.1}{\ignorespaces Browsable API root produced by Django REST Framework. This page confirms that the main resource groups are exposed successfully and makes the resource layout inspectable without a separate API client.}}{29}{figure.caption.105}%
+\contentsline {figure}{\numberline {7.2}{\ignorespaces Custom API docs page that summarizes major routes and current authentication behavior. It provides a simpler classroom-facing overview than the raw DRF interface and helps connect API endpoints to the report's implementation narrative.}}{31}{figure.caption.109}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {8.1}{\ignorespaces Terminal screenshot showing the automated test suite executing successfully. The current project passes thirteen tests, which gives the report a concrete and reproducible verification result rather than a purely narrative claim.}}{35}{figure.caption.132}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }

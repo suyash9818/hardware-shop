@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}Create RMA{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4"><div><h1 class="mb-1">Create Warranty / RMA Request</h1><p class="text-muted mb-0">Capture a basic return or warranty request.</p></div><a class="btn btn-outline-light" href="{% url 'rma:rma_list' %}">Back</a></div>
+<div class="card card-soft"><div class="card-body"><form method="post">{% csrf_token %}{{ form.as_p }}<button class="btn btn-primary" type="submit">Create RMA</button></form></div></div>
+{% endblock %}

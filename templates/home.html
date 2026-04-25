@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Hardware Shop — Demo{% endblock %}
+{% block content %}
+  <div class="row g-3 align-items-stretch">
+    <div class="col-lg-7">
+      <div class="card card-soft h-100">
+        <div class="card-body">
+          <h1 class="mb-2">Intelligent Hardware-Focused E‑Commerce</h1>
+          <p class="text-muted mb-3">
+            A Django prototype for hardware parts that supports dynamic specifications (JSONField),
+            inventory tracking (quantity + optional serialization), and an intelligent fulfillment decision engine.
+          </p>
+
+          <div class="d-flex gap-2 flex-wrap">
+            <a class="btn btn-primary" href="/catalog/products/"><i class="bi bi-grid-3x3-gap me-1"></i>Browse Products</a>
+            <a class="btn btn-outline-light" href="/orders/"><i class="bi bi-receipt me-1"></i>Orders</a>
+            <a class="btn btn-outline-light" href="/api/"><i class="bi bi-braces me-1"></i>API</a>
+            <a class="btn btn-outline-light" href="/admin/"><i class="bi bi-shield-lock me-1"></i>Admin</a>
+          </div>
+
+          <hr class="my-4" style="border-color: rgba(255,255,255,.14);">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="p-3 rounded-4" style="background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);">
+                <div class="fw-semibold mb-1"><i class="bi bi-sliders me-1"></i>Dynamic Specs</div>
+                <div class="text-muted small">Store technical attributes as JSON; render spec tables automatically.</div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="p-3 rounded-4" style="background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);">
+                <div class="fw-semibold mb-1"><i class="bi bi-lightning-charge me-1"></i>Decision Engine</div>
+                <div class="text-muted small">On submit, choose inventory vs supplier vs manufacturing with explanation.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-5">
+      <div class="card card-soft h-100">
+        <div class="card-body">
+          <h5 class="mb-3">Dashboards</h5>
+          <div class="d-grid gap-2">
+            <a class="btn btn-outline-light" href="/inventory/dashboard/"><i class="bi bi-box-seam me-1"></i>Inventory Dashboard</a>
+            <a class="btn btn-outline-light" href="/manufacturing/dashboard/"><i class="bi bi-gear-wide-connected me-1"></i>Manufacturing Dashboard</a>
+            <a class="btn btn-outline-light" href="/pricing/dashboard/"><i class="bi bi-cash-coin me-1"></i>Cost & Availability Dashboard</a>
+          </div>
+
+          <hr class="my-4" style="border-color: rgba(255,255,255,.14);">
+          <h6 class="mb-2">Quick setup</h6>
+          <ol class="text-muted small mb-0">
+            <li>Run migrations</li>
+            <li>Create a superuser</li>
+            <li>Add Products + Inventory + Supplier Offers (Admin)</li>
+            <li>Create an Order from a Product page, then Submit</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

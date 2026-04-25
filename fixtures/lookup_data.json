@@ -1,0 +1,313 @@
+[
+  {
+    "model": "catalog.lookupfamily",
+    "pk": 1,
+    "fields": { "code": "BOLT", "name": "Bolt", "ref_no": 100 }
+  },
+  {
+    "model": "catalog.lookupfamily",
+    "pk": 2,
+    "fields": { "code": "SCR", "name": "Screw", "ref_no": 101 }
+  },
+  {
+    "model": "catalog.lookupfamily",
+    "pk": 3,
+    "fields": { "code": "SET", "name": "Set Screw", "ref_no": 102 }
+  },
+  {
+    "model": "catalog.lookupfamily",
+    "pk": 4,
+    "fields": { "code": "STUD", "name": "Stud", "ref_no": 103 }
+  },
+  {
+    "model": "catalog.lookupfamily",
+    "pk": 5,
+    "fields": { "code": "ROD-THRD", "name": "Threaded Rod", "ref_no": 104 }
+  },
+  {
+    "model": "catalog.lookupfamily",
+    "pk": 6,
+    "fields": { "code": "NUT", "name": "Nut", "ref_no": 105 }
+  },
+  {
+    "model": "catalog.lookupfamily",
+    "pk": 7,
+    "fields": { "code": "WASH", "name": "Washer", "ref_no": 106 }
+  },
+  {
+    "model": "catalog.lookupfamily",
+    "pk": 8,
+    "fields": { "code": "SPACER", "name": "Spacer", "ref_no": 107 }
+  },
+  {
+    "model": "catalog.lookupfamily",
+    "pk": 9,
+    "fields": { "code": "STANDOFF", "name": "Standoff", "ref_no": 108 }
+  },
+  {
+    "model": "catalog.lookupfamily",
+    "pk": 10,
+    "fields": { "code": "CLAMP", "name": "Clamp", "ref_no": 109 }
+  },
+  {
+    "model": "catalog.lookupfamily",
+    "pk": 11,
+    "fields": { "code": "CLIP", "name": "Clip", "ref_no": 110 }
+  },
+  {
+    "model": "catalog.lookupfamily",
+    "pk": 12,
+    "fields": { "code": "INSERT", "name": "Insert", "ref_no": 111 }
+  },
+  {
+    "model": "catalog.lookupfamily",
+    "pk": 13,
+    "fields": { "code": "ANCHOR", "name": "Anchor", "ref_no": 112 }
+  },
+
+  {
+    "model": "catalog.lookupthread",
+    "pk": 1,
+    "fields": { "code": "M1.6x0.35", "ref_no": 100, "applies_to_family": [1, 2, 3] }
+  },
+  {
+    "model": "catalog.lookupthread",
+    "pk": 2,
+    "fields": { "code": "M2x0.40", "ref_no": 101, "applies_to_family": [1, 2, 3] }
+  },
+  {
+    "model": "catalog.lookupthread",
+    "pk": 3,
+    "fields": { "code": "M2.5x0.45", "ref_no": 102, "applies_to_family": [1, 2, 3] }
+  },
+  {
+    "model": "catalog.lookupthread",
+    "pk": 4,
+    "fields": { "code": "M3x0.50", "ref_no": 103, "applies_to_family": [1, 2, 3] }
+  },
+  {
+    "model": "catalog.lookupthread",
+    "pk": 5,
+    "fields": { "code": "M3x0.35", "ref_no": 104, "applies_to_family": [1, 2, 3] }
+  },
+  {
+    "model": "catalog.lookupthread",
+    "pk": 6,
+    "fields": { "code": "M4x0.70", "ref_no": 105, "applies_to_family": [1, 2, 3] }
+  },
+  {
+    "model": "catalog.lookupthread",
+    "pk": 7,
+    "fields": { "code": "M5x0.80", "ref_no": 106, "applies_to_family": [1, 2, 3] }
+  },
+  {
+    "model": "catalog.lookupthread",
+    "pk": 8,
+    "fields": { "code": "M6x1.00", "ref_no": 107, "applies_to_family": [1, 2, 3, 4, 5, 6] }
+  },
+  {
+    "model": "catalog.lookupthread",
+    "pk": 9,
+    "fields": { "code": "M8x1.25", "ref_no": 108, "applies_to_family": [1, 2, 3, 4, 5, 6] }
+  },
+  {
+    "model": "catalog.lookupthread",
+    "pk": 10,
+    "fields": { "code": "M10x1.50", "ref_no": 109, "applies_to_family": [1, 2, 3, 4, 5, 6] }
+  },
+  {
+    "model": "catalog.lookupthread",
+    "pk": 11,
+    "fields": { "code": "M12x1.75", "ref_no": 110, "applies_to_family": [1, 2, 3, 4, 5, 6] }
+  },
+  {
+    "model": "catalog.lookupthread",
+    "pk": 12,
+    "fields": { "code": "M16x2.00", "ref_no": 111, "applies_to_family": [1, 2, 3, 4, 5, 6] }
+  },
+
+  {
+    "model": "catalog.lookuphead",
+    "pk": 1,
+    "fields": { "code": "HX", "description": "Hex Head", "ref_no": 100, "applies_to_family": [1, 2] }
+  },
+  {
+    "model": "catalog.lookuphead",
+    "pk": 2,
+    "fields": { "code": "HX-FLANGE", "description": "Hex Flange Head", "ref_no": 101, "applies_to_family": [1, 2] }
+  },
+  {
+    "model": "catalog.lookuphead",
+    "pk": 3,
+    "fields": { "code": "HX-WASH", "description": "Hex Washer Head", "ref_no": 102, "applies_to_family": [2] }
+  },
+  {
+    "model": "catalog.lookuphead",
+    "pk": 4,
+    "fields": { "code": "SH", "description": "Socket Head Cap", "ref_no": 103, "applies_to_family": [1, 2] }
+  },
+  {
+    "model": "catalog.lookuphead",
+    "pk": 5,
+    "fields": { "code": "LP-SH", "description": "Low Profile Socket Head", "ref_no": 104, "applies_to_family": [1, 2] }
+  },
+  {
+    "model": "catalog.lookuphead",
+    "pk": 6,
+    "fields": { "code": "BH", "description": "Button Head", "ref_no": 105, "applies_to_family": [1, 2] }
+  },
+  {
+    "model": "catalog.lookuphead",
+    "pk": 7,
+    "fields": { "code": "FH", "description": "Flat Head (Countersunk)", "ref_no": 106, "applies_to_family": [2] }
+  },
+  {
+    "model": "catalog.lookuphead",
+    "pk": 8,
+    "fields": { "code": "OH", "description": "Oval Head", "ref_no": 107, "applies_to_family": [2] }
+  },
+
+  {
+    "model": "catalog.lookupdrive",
+    "pk": 1,
+    "fields": { "code": "HEXINT", "description": "Hex Socket (Allen)", "ref_no": 100, "applies_to_family": [1, 2, 3] }
+  },
+  {
+    "model": "catalog.lookupdrive",
+    "pk": 2,
+    "fields": { "code": "HEXEXT", "description": "External Hex", "ref_no": 101, "applies_to_family": [1, 2] }
+  },
+  {
+    "model": "catalog.lookupdrive",
+    "pk": 3,
+    "fields": { "code": "PH", "description": "Phillips", "ref_no": 102, "applies_to_family": [2] }
+  },
+  {
+    "model": "catalog.lookupdrive",
+    "pk": 4,
+    "fields": { "code": "POZI", "description": "Pozidriv", "ref_no": 103, "applies_to_family": [2] }
+  },
+  {
+    "model": "catalog.lookupdrive",
+    "pk": 5,
+    "fields": { "code": "SLOT", "description": "Slotted", "ref_no": 104, "applies_to_family": [2] }
+  },
+  {
+    "model": "catalog.lookupdrive",
+    "pk": 6,
+    "fields": { "code": "TORX", "description": "Torx", "ref_no": 105, "applies_to_family": [1, 2] }
+  },
+
+  {
+    "model": "catalog.lookupmaterial",
+    "pk": 1,
+    "fields": { "code": "SS304", "description": "Stainless Steel 304", "ref_no": 100, "applies_to_family": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13] }
+  },
+  {
+    "model": "catalog.lookupmaterial",
+    "pk": 2,
+    "fields": { "code": "SS316", "description": "Stainless Steel 316", "ref_no": 101, "applies_to_family": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13] }
+  },
+  {
+    "model": "catalog.lookupmaterial",
+    "pk": 3,
+    "fields": { "code": "A2-70", "description": "Stainless Steel A2, Property Class 70", "ref_no": 102, "applies_to_family": [1, 2, 3, 4, 5, 6] }
+  },
+  {
+    "model": "catalog.lookupmaterial",
+    "pk": 4,
+    "fields": { "code": "A4-80", "description": "Stainless Steel A4, Property Class 80", "ref_no": 103, "applies_to_family": [1, 2, 3, 4, 5, 6] }
+  },
+  {
+    "model": "catalog.lookupmaterial",
+    "pk": 5,
+    "fields": { "code": "STEEL-8.8", "description": "Steel Fastener, Property Class 8.8", "ref_no": 104, "applies_to_family": [1, 2, 4, 5] }
+  },
+  {
+    "model": "catalog.lookupmaterial",
+    "pk": 6,
+    "fields": { "code": "STEEL-10.9", "description": "Steel Fastener, Property Class 10.9", "ref_no": 105, "applies_to_family": [1, 2, 4, 5] }
+  },
+  {
+    "model": "catalog.lookupmaterial",
+    "pk": 7,
+    "fields": { "code": "BRASS", "description": "Brass", "ref_no": 106, "applies_to_family": [1, 2, 3, 6] }
+  },
+  {
+    "model": "catalog.lookupmaterial",
+    "pk": 8,
+    "fields": { "code": "NYLON", "description": "Nylon", "ref_no": 107, "applies_to_family": [1, 2, 3, 6, 7] }
+  },
+
+  {
+    "model": "catalog.lookupfeature",
+    "pk": 1,
+    "fields": { "code": "NONE", "description": "None", "ref_no": 100 }
+  },
+  {
+    "model": "catalog.lookupfeature",
+    "pk": 2,
+    "fields": { "code": "NYLOCK", "description": "Nylon Insert Lock", "ref_no": 101 }
+  },
+  {
+    "model": "catalog.lookupfeature",
+    "pk": 3,
+    "fields": { "code": "PREV-TORQUE", "description": "Prevailing Torque Lock", "ref_no": 102 }
+  },
+  {
+    "model": "catalog.lookupfeature",
+    "pk": 4,
+    "fields": { "code": "KEPS", "description": "Captive Washer", "ref_no": 103 }
+  },
+  {
+    "model": "catalog.lookupfeature",
+    "pk": 5,
+    "fields": { "code": "SERR-FLANGE", "description": "Serrated Flange", "ref_no": 104 }
+  },
+  {
+    "model": "catalog.lookupfeature",
+    "pk": 6,
+    "fields": { "code": "SELF-TAP", "description": "Self Tapping", "ref_no": 105 }
+  },
+
+  {
+    "model": "catalog.lookupfinish",
+    "pk": 1,
+    "fields": { "code": "NONE", "description": "None", "ref_no": 100 }
+  },
+  {
+    "model": "catalog.lookupfinish",
+    "pk": 2,
+    "fields": { "code": "ZINC", "description": "Zinc Plated", "ref_no": 101 }
+  },
+  {
+    "model": "catalog.lookupfinish",
+    "pk": 3,
+    "fields": { "code": "ZINC-BLUE", "description": "Zinc Plated (Blue)", "ref_no": 102 }
+  },
+  {
+    "model": "catalog.lookupfinish",
+    "pk": 4,
+    "fields": { "code": "ZINC-YELLOW", "description": "Zinc Plated (Yellow)", "ref_no": 103 }
+  },
+  {
+    "model": "catalog.lookupfinish",
+    "pk": 5,
+    "fields": { "code": "ZINC-BLACK", "description": "Zinc Plated (Black)", "ref_no": 104 }
+  },
+  {
+    "model": "catalog.lookupfinish",
+    "pk": 6,
+    "fields": { "code": "GALV-HDG", "description": "Hot Dip Galvanized", "ref_no": 105 }
+  },
+  {
+    "model": "catalog.lookupfinish",
+    "pk": 7,
+    "fields": { "code": "PASSIVATE", "description": "Passivated", "ref_no": 106 }
+  },
+  {
+    "model": "catalog.lookupfinish",
+    "pk": 8,
+    "fields": { "code": "BLACK-OXIDE", "description": "Black Oxide", "ref_no": 107 }
+  }
+]

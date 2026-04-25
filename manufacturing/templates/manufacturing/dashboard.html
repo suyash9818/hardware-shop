@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Manufacturing Dashboard — Hardware Shop{% endblock %}
+{% block content %}
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <h2 class="mb-0">Manufacturing Dashboard</h2>
+    <a href="/admin/manufacturing/manufacturingorder/" class="btn btn-outline-secondary btn-sm">Manage in Admin</a>
+  </div>
+
+  <div class="card card-soft">
+    <div class="card-body">
+      <h5 class="mb-3">Open Manufacturing Orders</h5>
+      <div class="table-responsive">
+        <table class="table table-sm table-hover align-middle table-striped table-hover">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Product</th>
+              <th class="text-end">Qty</th>
+              <th>Status</th>
+              <th>ETA</th>
+              <th>Manufacturer</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for mo in open_orders %}
+              <tr>
+                <td class="text-muted">MO-{{ mo.id }}</td>
+                <td><a href="/catalog/products/{{ mo.product.id }}/">{{ mo.product.name }}</a></td>
+                <td class="text-end fw-semibold">{{ mo.quantity }}</td>
+                <td><span class="badge text-bg-warning">{{ mo.status }}</span></td>
+                <td class="text-muted">{{ mo.expected_delivery|default:"-" }}</td>
+                <td>{{ mo.manufacturer.name }}</td>
+              </tr>
+            {% empty %}
+              <tr><td colspan="6" class="text-muted">No open manufacturing orders.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}

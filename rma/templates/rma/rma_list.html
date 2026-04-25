@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}RMAs{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4"><div><h1 class="mb-1">Warranty / RMA Requests</h1><p class="text-muted mb-0">Track return and warranty requests.</p></div><a class="btn btn-primary" href="{% url 'rma:rma_create' %}">New RMA</a></div>
+<div class="card card-soft"><div class="card-body"><div class="table-responsive"><table class="table table-sm align-middle"><thead><tr><th>ID</th><th>Product</th><th>Order</th><th>Status</th><th>Email</th><th>Created</th></tr></thead><tbody>{% for rma in rmas %}<tr><td><a href="{% url 'rma:rma_detail' rma.id %}">RMA-{{ rma.id }}</a></td><td>{{ rma.product.name }}</td><td>{% if rma.order %}#{{ rma.order.id }}{% else %}-{% endif %}</td><td><span class="badge text-bg-warning">{{ rma.get_status_display }}</span></td><td>{{ rma.customer_email|default:'-' }}</td><td>{{ rma.created_at|date:"Y-m-d H:i" }}</td></tr>{% empty %}<tr><td colspan="6" class="text-muted">No RMAs yet.</td></tr>{% endfor %}</tbody></table></div></div></div>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}{{ product.name }} - Hardware Shop{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+  <div>
+    <div class="small text-muted">{{ product.sku }}</div>
+    <h1 class="mb-1">{{ product.name }}</h1>
+    <div class="text-muted">{{ product.category.name }}</div>
+  </div>
+  <a href="{% url 'product_list' %}" class="btn btn-outline-light">Back to Products</a>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-8">
+    <div class="card card-soft h-100">
+      <div class="card-body">
+        <img
+          src="https://placehold.co/960x540/162033/eaf2ff?text={{ product.name|urlencode }}"
+          alt="{{ product.name }}"
+          class="product-image product-image-detail mb-4">
+        <p class="lead mb-3">{{ product.description|default:"No description available." }}</p>
+        <div class="fs-4 fw-semibold mb-4">${{ product.price }}</div>
+
+        <h5 class="mb-3">Specifications</h5>
+        <div class="table-responsive">
+          <table class="table table-sm align-middle mb-0">
+            <tbody>
+              {% for key, value in product.specifications.items %}
+                <tr>
+                  <th class="text-muted" style="width: 35%;">{{ key }}</th>
+                  <td>{{ value }}</td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="2" class="text-muted">No specifications available.</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="card card-soft mb-4">
+      <div class="card-body">
+        <h5 class="mb-3">Actions</h5>
+        <div class="d-grid gap-2">
+          <a href="{% url 'cart:add_to_cart' product.id %}" class="btn btn-success">Add to Cart</a>
+          <form method="post" action="{% url 'orders:create_order_from_product' product.id %}">
+            {% csrf_token %}
+            <label class="form-label small text-muted" for="qty">Create Order</label>
+            <div class="input-group">
+              <input id="qty" class="form-control" type="number" min="1" name="quantity" value="1">
+              <button class="btn btn-primary" type="submit">Create</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-soft">
+      <div class="card-body">
+        <h5 class="mb-3">Compatible Products</h5>
+        {% for p in compatible_products %}
+          <div class="mb-2">
+            <a href="{% url 'product_detail' p.id %}">{{ p.name }}</a>
+            <div class="small text-muted">{{ p.sku }}</div>
+          </div>
+        {% empty %}
+          <div class="text-muted">No compatible products found.</div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

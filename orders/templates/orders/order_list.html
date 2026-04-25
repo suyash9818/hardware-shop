@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Orders — Hardware Shop{% endblock %}
+{% block content %}
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <div>
+      <h2 class="mb-0">Orders</h2>
+      <div class="text-muted">DRAFT → SUBMITTED → FULFILLED / CANCELLED</div>
+    </div>
+    <a class="btn btn-outline-light btn-sm" href="/catalog/products/"><i class="bi bi-grid-3x3-gap me-1"></i>Browse Products</a>
+  </div>
+
+  <div class="card card-soft">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-sm table-hover align-middle mb-0 table-striped table-hover">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Status</th>
+              <th class="text-end">Total</th>
+              <th>Created</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for o in orders %}
+              <tr>
+                <td class="text-muted">#{{ o.id }}</td>
+                <td>
+                  {% if o.status == "DRAFT" %}
+                    <span class="badge text-bg-secondary">DRAFT</span>
+                  {% elif o.status == "SUBMITTED" %}
+                    <span class="badge text-bg-info">SUBMITTED</span>
+                  {% elif o.status == "FULFILLED" %}
+                    <span class="badge text-bg-success">FULFILLED</span>
+                  {% else %}
+                    <span class="badge text-bg-warning">{{ o.status }}</span>
+                  {% endif %}
+                </td>
+                <td class="text-end fw-semibold">${{ o.total_usd }}</td>
+                <td class="text-muted">{{ o.created_at|date:"M d, Y H:i" }}</td>
+                <td class="text-end">
+                  <a class="btn btn-primary btn-sm" href="{% url 'orders:order_detail' o.id %}">
+                    Open <i class="bi bi-arrow-right-short"></i>
+                  </a>
+                </td>
+              </tr>
+            {% empty %}
+              <tr><td colspan="5" class="text-muted">No orders yet. Create one from a product page.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}
